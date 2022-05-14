@@ -67,11 +67,19 @@
                                 <a href="TopSalers" class="dropdown-item">Estate Best Saller</a>
                             </div>
                         </div>
-                       <a asp-action="Testimonials" class="nav-item nav-link">Testimonials</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu rounded-0 m-0">
+                              <a asp-action="Testimonials" class="nav-item nav-link">Testimonials</a>
+                              <a asp-controller="Saler" asp-action="Index" class="nav-item nav-link">My Profile</a>
+
+                            </div>
+                        </div>
+                       
                         
                     </div>
                     
-                    <a asp-action="Register" class="btn btn-primary px-3 d-none d-lg-flex">Join Now</a>
+                    <a asp-controller="Saler" action="Logout" class="btn btn-primary px-3 d-none d-lg-flex">Logout</a>
                 </div>
             </nav>
         </div>
@@ -155,7 +163,6 @@
             </div>
         </div>
         <!-- Footer End -->
-
 
 
         <!-- Back to Top -->
