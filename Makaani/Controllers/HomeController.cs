@@ -40,6 +40,12 @@ namespace Makaani.Controllers
             return View();
         }
 
+
+        public IActionResult SingleEstate()
+        {
+            return View();
+        }
+
         public IActionResult Categorys()
         {
             return View();
