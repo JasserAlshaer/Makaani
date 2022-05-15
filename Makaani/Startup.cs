@@ -36,9 +36,11 @@ namespace Makaani
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDbContext<MakaniContext>(options =>
-    options.UseSqlServer(
-        Configuration.GetConnectionString("DefaultConnection")));
+                 options.UseSqlServer(
+                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddSession();
         }
+       
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -55,6 +57,7 @@ namespace Makaani
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseSession();
             app.UseStaticFiles();
 
             app.UseRouting();

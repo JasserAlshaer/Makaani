@@ -1,4 +1,5 @@
 ﻿using Makaani.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,12 +23,97 @@ namespace Makaani.Controllers
 
         public IActionResult Index()
         {
-            return View();
+
+            var users = _context.User.ToList();
+            var testiomonails = _context.Testimonails.ToList();
+
+            var UserFeeds = from u in users
+                            join t in testiomonails
+            on u.UserId equals t.UserId
+                            select new Feed
+                            {
+                                User = u,
+                                Testimonails = t
+                            };
+
+            IEnumerable<Feed> Feeds = UserFeeds;
+
+            var EsatateCategory=_context.Category.ToList();
+            var Place=_context.Provinces.ToList();
+
+            var media=_context.Media.Where(x=>x.IsMainImage==true && x.MediaTypeId==1).ToList();
+            var finishes=_context.Finishes.ToList();
+            var product =_context.Product.ToList();
+
+
+            var estateCardJoinData=     from p in product  join
+                                          f in finishes on p.FinishesId equals f.FinishesId join
+                                          m in media on p.ProductId equals m.ProductId
+                                          select new EstateMain
+                                          {
+                                              Product = p,
+                                              Finishes=f,
+                                              Media=m,
+
+                                          };
+            return View(estateCardJoinData);
         }
 
         public IActionResult SearchForEstate(string keyWord,int categotyId,int typeId)
         {
-            return View();
+            var Pmedia = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
+            var Pfinishes = _context.Finishes.ToList();
+            var category = _context.Category.ToList();
+            var department = _context.Department.ToList();
+            var Place = _context.Provinces.ToList();
+            var location = _context.Location.ToList();
+            var users = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var promoution = _context.Promotion.ToList();
+            var offer = _context.Offer.ToList();
+            var media = _context.Media.ToList();
+            var finishes = _context.Finishes.ToList();
+            var product = _context.Product.ToList();
+            var ads = _context.Ads.ToList();
+
+
+            var estateCardJoinData = from p in product
+                                     join
+                                     f in finishes on p.FinishesId equals f.FinishesId
+                                     join
+                                      m in media on p.ProductId equals m.ProductId
+                                     select new EstateMain
+                                     {
+                                         Product = p,
+                                         Finishes = f,
+                                         Media = m,
+
+                                     };
+
+            var estateFullAdsInfo = from a in ads
+                                    join
+                                    u in users on a.UserId equals u.UserId
+                                    join
+                                    l in location on a.LocationId equals l.LoactionId
+                                    join
+                                    d in department on a.DepartmentId equals d.DepartmentId
+                                    join
+                                    c in category on a.CategoryId equals c.CategoryId
+                                    join
+                                    e in estateCardJoinData on a.ProductId equals e.Product.ProductId
+
+
+
+                                    select new AdsCard
+                                    {
+                                        Ads = a,
+                                        User = u,
+                                        Location = l,
+                                        Department = d,
+                                        Category = c,
+                                        EstateMain = e,
+
+                                    };
+            return RedirectToAction("Estate", estateFullAdsInfo);
         }
 
         public IActionResult AboutUs()
@@ -37,28 +123,163 @@ namespace Makaani.Controllers
 
         public IActionResult Estate()
         {
-            return View();
+            var Pmedia = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
+            var Pfinishes = _context.Finishes.ToList();
+            var category = _context.Category.ToList();
+            var department = _context.Department.ToList();
+            var Place = _context.Provinces.ToList();
+            var location = _context.Location.ToList();
+            var users = _context.User.Where(x=> x.UserId!= HttpContext.Session.GetInt32("Id")).ToList();
+            var promoution = _context.Promotion.ToList();
+            var offer = _context.Offer.ToList();
+            var media = _context.Media.ToList();
+            var finishes = _context.Finishes.ToList();
+            var product = _context.Product.ToList();
+            var ads = _context.Ads.ToList();
+
+
+            var estateCardJoinData = from p in product
+                                     join
+                                     f in finishes on p.FinishesId equals f.FinishesId
+                                     join
+                                      m in media on p.ProductId equals m.ProductId
+                                     select new EstateMain
+                                     {
+                                         Product = p,
+                                         Finishes = f,
+                                         Media = m,
+
+                                     };
+           
+            var estateFullAdsInfo = from a in ads
+                                     join
+                                     u in users on a.UserId equals u.UserId
+                                     join
+                                     l in location on a.LocationId equals l.LoactionId
+                                     join
+                                     d in department on a.DepartmentId equals d.DepartmentId
+                                     join 
+                                     c in category on a.CategoryId equals c.CategoryId
+                                     join 
+                                     e in estateCardJoinData on a.ProductId equals e.Product.ProductId
+
+
+
+                                     select new AdsCard
+                                     {
+                                        Ads = a,    
+                                        User = u,   
+                                        Location = l,
+                                        Department = d,
+                                        Category = c,
+                                        EstateMain = e,
+
+                                     };
+            return View(estateFullAdsInfo);
+
         }
 
 
-        public IActionResult SingleEstate()
+        public IActionResult SingleEstate(int id)
         {
-            return View();
+            var Pmedia = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
+            var Pfinishes = _context.Finishes.ToList();
+            var category = _context.Category.ToList();
+            var department = _context.Department.ToList();
+            var Place = _context.Provinces.ToList();
+            var location = _context.Location.ToList();
+            var users = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var promoution = _context.Promotion.ToList();
+            var offer = _context.Offer.ToList();
+            var media = _context.Media.ToList();
+            var finishes = _context.Finishes.ToList();
+            var product = _context.Product.ToList();
+            var ads = _context.Ads.ToList();
+
+
+            var estateCardJoinData = from p in product
+                                     join
+                                     f in finishes on p.FinishesId equals f.FinishesId
+                                     join
+                                      m in media on p.ProductId equals m.ProductId
+                                     select new EstateMain
+                                     {
+                                         Product = p,
+                                         Finishes = f,
+                                         Media = m,
+
+                                     };
+
+            var estateFullAdsInfo = from a in ads
+                                    join
+                                    u in users on a.UserId equals u.UserId
+                                    join
+                                    l in location on a.LocationId equals l.LoactionId
+                                    join
+                                    d in department on a.DepartmentId equals d.DepartmentId
+                                    join
+                                    c in category on a.CategoryId equals c.CategoryId
+                                    join
+                                    e in estateCardJoinData on a.ProductId equals e.Product.ProductId
+
+
+
+                                    select new AdsCard
+                                    {
+                                        Ads = a,
+                                        User = u,
+                                        Location = l,
+                                        Department = d,
+                                        Category = c,
+                                        EstateMain = e,
+
+                                    };
+            return View(estateFullAdsInfo.ElementAt(0));
         }
 
         public IActionResult Categorys()
         {
-            return View();
+            return View(_context.Category.ToList());
         }
 
         public IActionResult TopSalers()
         {
-            return View();
+            var ads=_context.Ads.ToList();
+            var users=_context.User.ToList();   
+            List <User> topSallers=new List<User>();
+            foreach (User u in users)
+            {
+                int sum = 0;
+                foreach(Ads a in ads)
+                {
+                    if(u.UserId == a.UserId)
+                    {
+                        sum++;
+                    }
+                }
+                if (sum > 10)
+                {
+                    topSallers.Add(u);
+                }
+            }
+
+            return View(topSallers );
         }
 
         public IActionResult Testimonials()
         {
-            return View();
+            var users=_context.User.ToList();
+            var testiomonails=_context.Testimonails.ToList();
+
+            var UserFeeds = from u in users
+                            join t in testiomonails
+            on u.UserId equals t.UserId
+                            select new Feed
+                            {
+                                User = u,
+                                Testimonails = t
+                            };
+            return View(UserFeeds);
         }
 
         public IActionResult Error()
@@ -88,6 +309,7 @@ namespace Makaani.Controllers
                 }
                 else
                 {
+                    HttpContext.Session.SetInt32("Id", (int)login.UserId);
                     return RedirectToAction("Index", "Saler");
                 }
             }
@@ -100,6 +322,7 @@ namespace Makaani.Controllers
                 }
                 else
                 {
+                    HttpContext.Session.SetInt32("Id",(int)login.UserId);
                     return RedirectToAction("Index", "Saler");
                 }
             }
