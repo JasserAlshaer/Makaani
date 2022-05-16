@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,6 +42,82 @@ namespace Makaani.Controllers
                               Login =l
                           };
             return View(profile);
+        }
+
+        public IActionResult MyProducts()
+        {
+           return View(_context.Product.Where(x=>x.OwnerId==HttpContext.Session.GetInt32("Id")).ToList());
+        }
+        [HttpPost]
+        public IActionResult InsertProducts(double area,int bathes,int bedroom,int living,int ludary
+            ,int grage,int kitchen,int store,bool isBalcon, bool isGarden, bool isElvator,
+            bool swimbool,int floor,int finishiesId,bool manyfloor,bool furniture,int floorsum)
+        {
+            Product product =new Product();
+            product.Area = area;
+            product.BathRooms = bathes;
+            product.Store = store;
+            product.BedRooms = bedroom;
+            product.LundrayRoom = ludary;
+            product.Grage = grage;
+            product.Kitchen = kitchen;
+            product.IsHasFurniture = furniture;
+            product.IshaveBalcon= isBalcon;
+            product.IshaveGarden= isGarden;
+            product.IshaveElvator= isElvator;   
+            product.IshaveSwimPool= swimbool;
+            product.FloorNumber= floor;
+            product.IsHasManyFloor = manyfloor;
+            product.FinishesId = finishiesId;
+            product.FloorSum = floorsum;
+            product.LivingRoom = living;
+            _context.Add(product);
+            _context.SaveChanges();
+
+            return RedirectToAction("MyProducts");
+        }
+        [HttpPost]
+        public IActionResult UpdateProducts(int productId,double area, int bathes, int bedroom, int living, int ludary
+            , int grage, int kitchen, int store, bool isBalcon, bool isGarden, bool isElvator,
+            bool swimbool, int floor, int finishiesId, bool manyfloor, bool furniture, int floorsum)
+        {
+            var product = _context.Product.Where(l => l.ProductId == productId).Single();
+            if (product == null)
+            {
+                return NotFound();
+            }
+            product.Area = area;
+            product.BathRooms = bathes;
+            product.Store = store;
+            product.BedRooms = bedroom;
+            product.LundrayRoom = ludary;
+            product.Grage = grage;
+            product.Kitchen = kitchen;
+            product.IsHasFurniture = furniture;
+            product.IshaveBalcon = isBalcon;
+            product.IshaveGarden = isGarden;
+            product.IshaveElvator = isElvator;
+            product.IshaveSwimPool = swimbool;
+            product.FloorNumber = floor;
+            product.IsHasManyFloor = manyfloor;
+            product.FinishesId = finishiesId;
+            product.FloorSum = floorsum;
+            product.LivingRoom = living;
+            _context.Update(product);
+            _context.SaveChanges();
+            return RedirectToAction("MyProducts");
+        }
+        public IActionResult DeleteProducts(int productId)
+        {
+            var prod = _context.Product.Where(l => l.ProductId == productId).Single();
+            if (prod == null)
+            {
+                return NotFound();
+            }
+
+            _context.Remove(prod);
+            _context.SaveChangesAsync();
+            return RedirectToAction("MyProducts");
         }
         [HttpPost]
         public async Task<IActionResult> UpdateProfile(IFormFile image,string name,string address
@@ -97,25 +174,281 @@ namespace Makaani.Controllers
         {
             return View(_context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("Id")).ToList());
         }
+        public IActionResult FollowNewUser(int seondUserId)
+        {
+            Follower follower = new Follower();
+            follower.FirstUserId=HttpContext.Session.GetInt32("Id");
+            follower.SecondUserId = seondUserId;
+            _context.Add(follower);
+            _context.SaveChanges();
+            return RedirectToAction("Follower");
+        }
+
+        public IActionResult UnFollowUser(int follwerId)
+        {
+            var recorde=_context.Follower.Where(x=>x.FollowerId == follwerId).Single();
+            if(recorde == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _context.Remove(recorde);
+                _context.SaveChanges();
+                return RedirectToAction("Follower");
+            }
+        }
         public IActionResult LastViewAds()
         {
-            return View();
+            return View(_context.LastViewAds.ToList());
         }
-        public IActionResult loveList()
+        public async Task<IActionResult> ClearLastViewAds()
         {
-            return View();
+            List<LastViewAds>lastViewAds=_context.LastViewAds.Where(l=>l.UserId==HttpContext.Session.GetInt32("Id")).ToList();
+            foreach(var lastViewAd in lastViewAds)
+            {
+                _context.Remove(lastViewAd);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> RemoveLastViewAdsRecord(int recordId)
+        {
+            var lastViewAds = _context.LastViewAds.Where(l => l.LastViewAdsId == recordId).Single();
+           if(lastViewAds == null)
+            {
+                return NotFound();
+            }
+
+           _context.Remove(lastViewAds);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult LoveList()
+        {
+            return View(_context.LoveList.ToList());
+        }
+        public IActionResult InsertToLoveList(int productId)
+        {
+            var recorde = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("Id")).Single();
+            if (recorde == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                LovedProductList lovedProduct = new LovedProductList();
+                lovedProduct.ProductId = productId;
+                lovedProduct.LoveListId = recorde.LoveListId;
+                _context.Add(lovedProduct);
+                _context.SaveChanges();
+
+            }
+            return RedirectToAction("LoveList");
+        }
+        public IActionResult DeleteFromLoveList(int productId)
+        {
+            var recorde = _context.LovedProductList.Where(x => x.ProductId == productId).Single();
+            if (recorde == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _context.Remove(recorde);
+                _context.SaveChanges();
+               
+            }
+            return RedirectToAction("LoveList");
         }
         public IActionResult MyAds()
         {
-            return View();
+            return View(_context.Ads.Where(x=> x.UserId==HttpContext.Session.GetInt32("Id")).ToList());
         }
-        public IActionResult PayingOffer()
+        [HttpPost]
+        public async Task<IActionResult> InsertAds(int productId, string title, double price, string description
+            , int promationId, int OfferId,int categotyId,int departmentId)
         {
-            return View(_context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).ToList());
+
+            Ads ad=new Ads();
+            ad.ProductId = productId;
+            ad.Descrption = description;
+            ad.Price = price;   
+            ad.CategoryId = categotyId;
+            ad.PromotionId = promationId;
+            ad.DepartmentId= departmentId;
+            ad.Title = title;
+
+            _context.Ads.Add(ad);
+            
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("MyAds");
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateAdsMainInfo(int adsId,string title,double price,string description
+            ,int promationId,int offerId)
+        {
+
+            var ad = _context.Ads.Where(x => x.AdsId == adsId).Single();
+            if (ad != null)
+            {
+                ad.Descrption = description;
+                ad.Price = price;
+                ad.Title = title;
+                ad.PromotionId = promationId;
+                ad.OfferId = offerId;
+                _context.Update(ad);
+                _context.SaveChanges();
+            }
+            else
+            {
+                return NotFound();
+            }
+
+                await _context.SaveChangesAsync();
+               return RedirectToAction("MyAds");
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateAdsLocationInfo(int adsId,string label , string mapslink
+            ,int regionId,int provinceId,string note)
+        {
+           
+
+            var ad = _context.Ads.Where(x => x.AdsId == adsId).Single();
+            if (ad != null)
+            {
+                Location location = new Location();
+                location.LoactionLabel = label;
+                location.MapsLink = mapslink;
+                location.RegoinId = regionId;
+                location.ProvincesId = provinceId;
+                location.Notes = note;
+
+                _context.Add(location);
+                _context.SaveChanges();
+
+
+                ad.LocationId=_context.Location.OrderByDescending(x=>x.LoactionId).First().LoactionId;
+                _context.Update(ad);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("MyAds");
+            }
+            else
+            {
+                return NotFound();
+            } 
+        }
+
+
+        public IActionResult RecivedPayingOffer()
+        {
+            var offers = _context.PayingOffer.Where(a => a.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var users  = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var product = _context.Product.ToList();
+            var ads=_context.Ads.Where(x => x.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+
+            var recivedPayOffers=from o in offers join p in product on o.ProductId equals p.ProductId
+                                                  join a in ads on o.ProductId equals a.ProductId
+                                                  join u in users on a.UserId equals u.UserId
+                                                  select new UsersPayingOffers
+                                                  {
+                                                      Product=p,
+                                                      Ads=a,
+                                                      PayingOffer=o,
+                                                      User=u
+                                                  };
+            return View(recivedPayOffers);
+        }
+
+
+        public IActionResult OutGoingPayingOffer()
+        {
+            var offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+            return View(offers);
+        }
+        public IActionResult SendPayOffer(int productId,string note,double ? price =0)
+        {
+            PayingOffer payingOffer = new PayingOffer();
+            payingOffer.ProductId = productId;
+            payingOffer.Note = note;
+            payingOffer.ProvidedPrice= price;
+            payingOffer.OfferDate= DateTime.Now;
+            payingOffer.UserId= HttpContext.Session.GetInt32("Id");
+            _context.Add(payingOffer);
+            _context.SaveChanges();
+            return RedirectToAction("OutGoingPayingOffer");
+        }
+        public IActionResult UpdatePayOffer(int offerId, string note, double? price = 0)
+        {
+            var payingOffer = _context.PayingOffer.Where(x => x.PayingOfferId == offerId).Single();
+            if (payingOffer == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                payingOffer.Note = note;
+                payingOffer.ProvidedPrice = price;
+                payingOffer.OfferDate = DateTime.Now;
+                payingOffer.UserId = HttpContext.Session.GetInt32("Id");
+                _context.Add(payingOffer);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("OutGoingPayingOffer");
+        }
+        public IActionResult DeletePayOffer(int offerId)
+        {
+            var recorde = _context.PayingOffer.Where(x => x.PayingOfferId == offerId).Single();
+            if (recorde == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _context.Remove(recorde);
+                _context.SaveChanges();
+
+            }
+            return RedirectToAction("OutGoingPayingOffer");
+
         }
         public IActionResult Searches()
         {
             return View(_context.UserSearch.ToList());
+        }
+
+        public IActionResult DeleteSearch(bool deleteAll,int searchId)
+        {
+            if (deleteAll)
+            {
+                List<UserSearch> searches = _context.UserSearch.Where(x=> x.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+                foreach (UserSearch search in searches)
+                {
+                    _context.Remove(search);
+                    _context.SaveChanges();
+                }
+               
+            }
+            else
+            {
+                var recorde = _context.UserSearch.Where(x => x.UserSearchId == searchId).Single();
+                if (recorde == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _context.Remove(recorde);
+                    _context.SaveChanges();
+
+                }
+                
+            }
+            return RedirectToAction("Searches");
         }
 
         public IActionResult Logout()

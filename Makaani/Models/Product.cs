@@ -37,8 +37,10 @@ namespace Makaani.Models
         public bool? IsHasManyFloor { get; set; }
         public int? FloorSum { get; set; }
         public bool? IsHasFurniture { get; set; }
+        public int? OwnerId { get; set; }
 
         public virtual Finishes Finishes { get; set; }
+        public virtual User Owner { get; set; }
         public virtual ICollection<Ads> Ads { get; set; }
         public virtual ICollection<Feature> Feature { get; set; }
         public virtual ICollection<LovedProductList> LovedProductList { get; set; }

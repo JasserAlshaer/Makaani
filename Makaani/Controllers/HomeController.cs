@@ -234,7 +234,7 @@ namespace Makaani.Controllers
                                         EstateMain = e,
 
                                     };
-            return View(estateFullAdsInfo.ElementAt(0));
+            return View();
         }
 
         public IActionResult Categorys()

@@ -49,7 +49,7 @@ namespace Makaani.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-D80NIJG\\SQLEXPRESS;Database=Makani;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-7945E40\\SQLEXPRESS;Database=Makani;Trusted_Connection=True;");
             }
         }
 
@@ -389,6 +389,11 @@ namespace Makaani.Models
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.FinishesId)
                     .HasConstraintName("FK_Product_Finishes");
+
+                entity.HasOne(d => d.Owner)
+                    .WithMany(p => p.Product)
+                    .HasForeignKey(d => d.OwnerId)
+                    .HasConstraintName("FK_Product_User");
             });
 
             modelBuilder.Entity<Promotion>(entity =>

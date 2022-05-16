@@ -18,6 +18,7 @@ namespace Makaani.Models
             Login = new HashSet<Login>();
             LoveList = new HashSet<LoveList>();
             PayingOffer = new HashSet<PayingOffer>();
+            Product = new HashSet<Product>();
             Rate = new HashSet<Rate>();
             Testimonails = new HashSet<Testimonails>();
             UserSearch = new HashSet<UserSearch>();
@@ -39,6 +40,7 @@ namespace Makaani.Models
         public virtual ICollection<Login> Login { get; set; }
         public virtual ICollection<LoveList> LoveList { get; set; }
         public virtual ICollection<PayingOffer> PayingOffer { get; set; }
+        public virtual ICollection<Product> Product { get; set; }
         public virtual ICollection<Rate> Rate { get; set; }
         public virtual ICollection<Testimonails> Testimonails { get; set; }
         public virtual ICollection<UserSearch> UserSearch { get; set; }
