@@ -76,7 +76,16 @@ namespace Makaani.Controllers
 
             return RedirectToAction("MyProducts");
         }
-        [HttpPost]
+        public IActionResult UpdateProducts(int productId)
+        {
+            var product = _context.Product.Where(l => l.ProductId == productId).Single();
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
+       [HttpPost]
         public IActionResult UpdateProducts(int productId,double area, int bathes, int bedroom, int living, int ludary
             , int grage, int kitchen, int store, bool isBalcon, bool isGarden, bool isElvator,
             bool swimbool, int floor, int finishiesId, bool manyfloor, bool furniture, int floorsum)
@@ -272,21 +281,35 @@ namespace Makaani.Controllers
         public async Task<IActionResult> InsertAds(int productId, string title, double price, string description
             , int promationId, int OfferId,int categotyId,int departmentId)
         {
+            int id = (int)HttpContext.Session.GetInt32("UserId");
+            if(id != 0)
+            {
+                var role = _context.Login.Where(x => x.UserId == id).SingleOrDefault();
+                if (role == null || role.RoleId!=3)
+                {
+                    return Unauthorized();
+                }
+                Ads ad = new Ads();
+                ad.ProductId = productId;
+                ad.Descrption = description;
+                ad.Price = price;
+                ad.CategoryId = categotyId;
+                ad.PromotionId = promationId;
+                ad.DepartmentId = departmentId;
+                ad.Title = title;
 
-            Ads ad=new Ads();
-            ad.ProductId = productId;
-            ad.Descrption = description;
-            ad.Price = price;   
-            ad.CategoryId = categotyId;
-            ad.PromotionId = promationId;
-            ad.DepartmentId= departmentId;
-            ad.Title = title;
+                _context.Ads.Add(ad);
 
-            _context.Ads.Add(ad);
-            
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction("MyAds");
+                await _context.SaveChangesAsync();
+                return RedirectToAction("MyAds");
+            }
+            else
+            {
+                return NotFound();
+            }
+
+           
         }
         [HttpPost]
         public async Task<IActionResult> UpdateAdsMainInfo(int adsId,string title,double price,string description
@@ -361,7 +384,7 @@ namespace Makaani.Controllers
                                                       PayingOffer=o,
                                                       User=u
                                                   };
-            return View(recivedPayOffers);
+            return View("PayingOffer", recivedPayOffers);
         }
 
 
@@ -380,7 +403,7 @@ namespace Makaani.Controllers
             payingOffer.UserId= HttpContext.Session.GetInt32("Id");
             _context.Add(payingOffer);
             _context.SaveChanges();
-            return RedirectToAction("OutGoingPayingOffer");
+            return RedirectToAction("PayingOffer", payingOffer);
         }
         public IActionResult UpdatePayOffer(int offerId, string note, double? price = 0)
         {

@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
 	Layout=null;
 }
 <!DOCTYPE html>
@@ -19,7 +18,7 @@
 	<div class="page-content" style="background-color:#38d39f;">
 		<div class="form-v1-content">
 			<div class="wizard-form">
-		        <form class="form-register" action="#" method="post">
+		        <form class="form-register" asp-action="Register" method="post">
 		        	<div id="form-total">
 		        		<!-- SECTION 1 -->
 			            <h2>
@@ -36,13 +35,13 @@
 									<div class="form-holder">
 										<fieldset>
 											<legend>First Name</legend>
-											<input type="text" class="form-control" id="first-name" name="first-name" placeholder="First Name" required>
+											<input type="text" class="form-control" id="first-name" name="first" placeholder="First Name" required>
 										</fieldset>
 									</div>
 									<div class="form-holder">
 										<fieldset>
 											<legend>Last Name</legend>
-											<input type="text" class="form-control" id="last-name" name="last-name" placeholder="Last Name" required>
+											<input type="text" class="form-control" id="last-name" name="second" placeholder="Last Name" required>
 										</fieldset>
 									</div>
 								</div>
@@ -50,7 +49,15 @@
 									<div class="form-holder form-holder-2">
 										<fieldset>
 											<legend>Your Email</legend>
-											<input type="text" name="your_email" id="your_email" class="form-control" pattern="[^@@]+@@[^@@]+.[a-zA-Z]{2,6}" placeholder="example@email.com" required>
+											<input type="text" name="Email" id="your_email" class="form-control" pattern="[^@@]+@@[^@@]+.[a-zA-Z]{2,6}" placeholder="example@email.com" required>
+										</fieldset>
+									</div>
+								</div>
+					           <div class="form-row">
+									<div class="form-holder form-holder-2">
+										<fieldset>
+											<legend>Password</legend>
+											<input type="password" name="Password"  class="form-control"  required>
 										</fieldset>
 									</div>
 								</div>
@@ -58,14 +65,15 @@
 									<div class="form-holder form-holder-2">
 										<fieldset>
 											<legend>Phone Number</legend>
-											<input type="text" class="form-control" id="phone" name="phone" placeholder="+1 888-999-7777" required>
+											<input type="text" class="form-control" id="phone" name="Phone" placeholder="1 888-999-7777" required>
 										</fieldset>
 									</div>
 								</div>
 								<div class="form-row form-row-date">
 									<div class="form-holder form-holder-2">
 										<label class="special-label">Birth Date:</label>
-										<select name="month" id="month">
+										<input type="date" class="form-control" id="phone" name="BirthDate" required>
+										@*<select name="month" id="month">
 											<option value="MM" disabled selected>MM</option>
 											<option value="16">16</option>
 											<option value="17">17</option>
@@ -87,17 +95,23 @@
 											<option value="2014">2014</option>
 											<option value="2013">2013</option>
 										</select>
-									</div>
+									</div>*@
 								</div>
-								<div class="form-row">
+					@*			<div class="form-row">
 									<div class="form-holder form-holder-2">
-										<input type="text" class="form-control input-border" id="ssn" name="ssn" placeholder="SSN" required>
+										<select name="Nationality">
+										    <option value="Jordan">Jordan</option>
+											<option value="2017">2017</option>
+										    <option value="2017">2017</option>
+										</select>
+										<input type="text" class="form-control" id="phone" name="Address" placeholder="Address" required>
 									</div>
-								</div>
+								</div>*@
 							</div>
 			            </section>
 			          
-			            
+			         </div> 
+					 <button type="submit">Save And Continue</button>
 		        </form>
 			</div>
 		</div>

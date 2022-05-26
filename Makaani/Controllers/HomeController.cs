@@ -23,13 +23,13 @@ namespace Makaani.Controllers
 
         public IActionResult Index()
         {
-
+            //Linq  
             var users = _context.User.ToList();
             var testiomonails = _context.Testimonails.ToList();
 
             var UserFeeds = from u in users
                             join t in testiomonails
-            on u.UserId equals t.UserId
+                            on u.UserId equals t.UserId
                             select new Feed
                             {
                                 User = u,
@@ -56,7 +56,7 @@ namespace Makaani.Controllers
                                               Media=m,
 
                                           };
-            return View(estateCardJoinData);
+            return View(Tuple.Create(estateCardJoinData, EsatateCategory, Place));
         }
 
         public IActionResult SearchForEstate(string keyWord,int categotyId,int typeId)
@@ -234,7 +234,7 @@ namespace Makaani.Controllers
                                         EstateMain = e,
 
                                     };
-            return View();
+            return View(estateFullAdsInfo);
         }
 
         public IActionResult Categorys()
@@ -334,10 +334,10 @@ namespace Makaani.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Register(string FullName, string Address, string Nationality, DateTime? BirthDate,String Email,String Password,String Phone)
+        public IActionResult Register(string first,string second, string Address, string Nationality, DateTime? BirthDate,String Email,String Password,String Phone)
         {
             User makamiUser=new User();
-            makamiUser.FullName = FullName;
+            makamiUser.FullName = first+"\t"+ second;
             makamiUser.Address = Address;
             makamiUser.Nationality = Nationality;
             makamiUser.BirthDate = BirthDate;
