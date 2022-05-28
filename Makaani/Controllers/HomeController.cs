@@ -44,21 +44,32 @@ namespace Makaani.Controllers
             var media=_context.Media.Where(x=>x.IsMainImage==true && x.MediaTypeId==1).ToList();
             var finishes=_context.Finishes.ToList();
             var product =_context.Product.ToList();
-
+            var ads = _context.Ads.Where(x=>x.Date <= DateTime.Now.AddDays(7)).ToList();
+            var depar=_context.Department.ToList();
+            var owners = _context.User.ToList();
+            var locations = _context.Location.ToList();
 
             var estateCardJoinData=     from p in product  join
                                           f in finishes on p.FinishesId equals f.FinishesId join
                                           m in media on p.ProductId equals m.ProductId
-                                          select new EstateMain
+                                          join a in ads on p.ProductId equals a.ProductId
+                                          join o in owners on a.UserId equals o.UserId
+                                          join d in depar on a.DepartmentId equals d.DepartmentId
+                                          join l in locations on a.LocationId equals l.LoactionId
+                                           select new EstateMain
                                           {
                                               Product = p,
                                               Finishes=f,
                                               Media=m,
+                                              Ads=a,
+                                              User=o,
+                                              Department=d,
+                                              Location=l
 
                                           };
             return View(Tuple.Create(estateCardJoinData, EsatateCategory, Place));
         }
-
+        [HttpPost]
         public IActionResult SearchForEstate(string keyWord,int categotyId,int typeId)
         {
             var Pmedia = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
@@ -74,6 +85,7 @@ namespace Makaani.Controllers
             var finishes = _context.Finishes.ToList();
             var product = _context.Product.ToList();
             var ads = _context.Ads.ToList();
+            var locations = _context.Location.ToList();
 
 
             var estateCardJoinData = from p in product
