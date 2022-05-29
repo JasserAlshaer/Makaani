@@ -168,6 +168,8 @@ m in media on p.ProductId equals m.ProductId
 
 
         public IActionResult SingleEstate(int id)
+        
+        
         {
             int productId =(int) _context.Ads.Where(x => x.ProductId == id).Single().ProductId;
             var media = _context.Media.Where(x=> x.ProductId== productId).ToList();
@@ -177,12 +179,12 @@ m in media on p.ProductId equals m.ProductId
             var Place = _context.Provinces.ToList();
             var location = _context.Location.ToList();
             var users = _context.User.ToList();
-            var promoution = _context.Promotion.ToList();
-            var offer = _context.Offer.ToList();
+            //var promoution = _context.Promotion.ToList();
+            //var offer = _context.Offer.ToList();
             var finishes = _context.Finishes.ToList();
             var feature=_context.Feature.Where(x=>x.ProductId==productId).ToList();
             var product = _context.Product.Where(x=>x.ProductId == productId).ToList();
-            var ads = _context.Ads.Where(x=>x.ProductId==productId).ToList();
+            var ads = _context.Ads.Where(x=>x.AdsId==id).ToList();
 
 
             
@@ -221,6 +223,8 @@ m in media on p.ProductId equals m.ProductId
                                         Media=m
 
                                     };
+
+            ViewBag.adsViews = _context.LastViewAds.Where(x => x.AdsId == id).Count();
             return View(estateFullAdsInfo);
         }
 
@@ -343,6 +347,61 @@ m in media on p.ProductId equals m.ProductId
             _context.SaveChanges();
 
             return RedirectToAction("Login");
+        }
+
+
+        public IActionResult SearchForEstateFromDashboard(string keyWord, int categotyId, int placeId)
+        {
+            var EsatateCategory = _context.Category.ToList();
+            if (categotyId != 0)
+            {
+                EsatateCategory = _context.Category.Where(x => x.CategoryId == categotyId).ToList();
+            }
+
+
+
+            var Place = _context.Provinces.ToList();
+            if (placeId != 0)
+            {
+                Place = _context.Provinces.Where(x => x.ProvincesId == placeId).ToList();
+
+            }
+            var ads = _context.Ads.ToList();
+
+            if (keyWord != null && keyWord != "")
+            {
+                ads = _context.Ads.Where(x => x.Title.Contains(keyWord)).ToList();
+            }
+
+            var media = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
+            var finishes = _context.Finishes.ToList();
+            var product = _context.Product.ToList();
+
+            var depar = _context.Department.ToList();
+            var owners = _context.User.ToList();
+            var locations = _context.Location.ToList();
+
+            var estateCardJoinData = from p in product
+                                     join
+                    f in finishes on p.FinishesId equals f.FinishesId
+                                     join
+                                     m in media on p.ProductId equals m.ProductId
+                                     join a in ads on p.ProductId equals a.ProductId
+                                     join o in owners on a.UserId equals o.UserId
+                                     join d in depar on a.DepartmentId equals d.DepartmentId
+                                     join l in locations on a.LocationId equals l.LoactionId
+                                     select new EstateMain
+                                     {
+                                         Product = p,
+                                         Finishes = f,
+                                         Media = m,
+                                         Ads = a,
+                                         User = o,
+                                         Department = d,
+                                         Location = l
+
+                                     };
+            return View("Estate", Tuple.Create(estateCardJoinData, _context.Category.ToList(), _context.Provinces.ToList()));
         }
 
     }

@@ -14,6 +14,8 @@ namespace Makaani.Models
         public DateTime? Date { get; set; }
         public bool? IsFaviourate { get; set; }
         public int? UserId { get; set; }
+        public int? CategoryId { get; set; }
+        public int? PlaceId { get; set; }
 
         public virtual User User { get; set; }
     }

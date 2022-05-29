@@ -22,11 +22,26 @@ namespace Makaani.Controllers
         }
         public IActionResult Index()
         {
+            
             ViewBag.Ads = _context.Ads.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).Count();
             ViewBag.Offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).Count();
             ViewBag.Follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("Id")).Count();
             ViewBag.LoveList = _context.LoveList.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).Count();
-            return View();
+            
+            var latestOffers=_context.PayingOffer.ToList();
+            var product=_context.Product.Where(a => a.OwnerId == HttpContext.Session.GetInt32("Id")).ToList();
+            var users = _context.User.ToList();
+
+            var providedOffers=from l in latestOffers join p in product
+                               on l.ProductId equals p.ProductId
+                               join u in users on l.UserId equals u.UserId
+                               select new ProvidedOffers{
+                                       User=u,
+                                       PayingOffer=l,
+                                       Product=p
+                                  };
+
+            return View(providedOffers);
         }
         public IActionResult Profile()
         {
@@ -181,7 +196,16 @@ namespace Makaani.Controllers
 
         public IActionResult Follower()
         {
-            return View(_context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("Id")).ToList());
+            var follower = _context.Follower.Where(a => a.FirstUserId == HttpContext.Session.GetInt32("Id")).ToList();
+            var user =_context.User.Where(x=>x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var myFollower = from f in follower
+                             join u in user on f.FirstUserId equals u.UserId
+                             select new Followers
+                             {
+                                 Follower = f,
+                                 User = u
+                             };
+            return View(myFollower);
         }
         public IActionResult FollowNewUser(int seondUserId)
         {
@@ -209,7 +233,18 @@ namespace Makaani.Controllers
         }
         public IActionResult LastViewAds()
         {
-            return View(_context.LastViewAds.ToList());
+            var last = _context.LastViewAds.Where(x => x.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+            var ads= _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+
+            var lastViewAds = from l in last
+                              join a in ads
+               on l.AdsId equals a.AdsId
+                              select new LastAds
+                              {
+                                  Ads=a,
+                                  LastViewAds=l
+                              };
+            return View(lastViewAds);
         }
         public async Task<IActionResult> ClearLastViewAds()
         {
@@ -238,7 +273,22 @@ namespace Makaani.Controllers
 
         public IActionResult LoveList()
         {
-            return View(_context.LoveList.ToList());
+            int lovelistId=_context.LoveList.Where(x=>x.UserId == HttpContext.Session.GetInt32("Id")).Single().LoveListId;
+            var loveItems = _context.LovedProductList.Where(x => x.LoveListId == lovelistId).ToList();
+            var ads=_context.Ads.ToList();
+            var product = _context.Product.ToList();
+
+            var myLoveList = from l in loveItems
+                             join p in product on
+         l.ProductId equals p.ProductId
+                             join a in ads on p.ProductId equals a.ProductId
+                             select new LoveListItem
+                             {
+                                 LovedProductList=l,
+                                 Product=p,
+                                 Ads=a
+                             };
+            return View(myLoveList);
         }
         public IActionResult InsertToLoveList(int productId)
         {
@@ -367,31 +417,27 @@ namespace Makaani.Controllers
         }
 
 
-        public IActionResult RecivedPayingOffer()
-        {
-            var offers = _context.PayingOffer.Where(a => a.UserId != HttpContext.Session.GetInt32("Id")).ToList();
-            var users  = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
-            var product = _context.Product.ToList();
-            var ads=_context.Ads.Where(x => x.UserId == HttpContext.Session.GetInt32("Id")).ToList();
-
-            var recivedPayOffers=from o in offers join p in product on o.ProductId equals p.ProductId
-                                                  join a in ads on o.ProductId equals a.ProductId
-                                                  join u in users on a.UserId equals u.UserId
-                                                  select new UsersPayingOffers
-                                                  {
-                                                      Product=p,
-                                                      Ads=a,
-                                                      PayingOffer=o,
-                                                      User=u
-                                                  };
-            return View("PayingOffer", recivedPayOffers);
-        }
-
 
         public IActionResult OutGoingPayingOffer()
         {
             var offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).ToList();
-            return View(offers);
+            var users = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var product = _context.Product.Where(x => x.OwnerId != HttpContext.Session.GetInt32("Id")).ToList();
+            var ads = _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+
+            var recivedPayOffers = from o in offers
+                                   join p in product on o.ProductId equals p.ProductId
+                                   join a in ads on o.ProductId equals a.ProductId
+                                   join u in users on a.UserId equals u.UserId
+                                   select new UsersPayingOffers
+                                   {
+                                       Product = p,
+                                       Ads = a,
+                                       PayingOffer = o,
+                                       User = u
+                                   };
+            return View(recivedPayOffers);
+            //return View(offers);
         }
 
         public IActionResult SendPayOffer(int adsId)
@@ -480,6 +526,7 @@ namespace Makaani.Controllers
             }
             return RedirectToAction("Searches");
         }
+     
 
         public IActionResult Logout()
         {
