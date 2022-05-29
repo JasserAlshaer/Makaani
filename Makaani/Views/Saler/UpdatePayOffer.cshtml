@@ -1,0 +1,86 @@
+﻿@model Makaani.Models.PayingOffer 
+@{
+     Layout = "_LayoutSaler";
+}
+  <main class="main-content  mt-0">
+    <section>
+      <div class="page-header min-vh-100">
+        <div class="container">
+          <div class="row">
+            <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 start-0 text-center justify-content-center flex-column">
+               @* <div class="card card-blog card-plain">
+                    <div class="card-header p-0 mt-n4 mx-3">
+                      <a class="d-block shadow-xl border-radius-xl">
+                        <img src="../assets/img/home-decor-2.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg">
+                      </a>
+                    </div>
+                    <div class="card-body p-3">
+                      <p class="mb-0 text-sm">Project #1</p>
+                      <a href="javascript:;">
+                        <h5>
+                          Scandinavian
+                        </h5>
+                      </a>
+                      <p class="mb-4 text-sm">
+                        Music is something that every person has his or her own specific opinion about.
+                      </p>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <button type="button" class="btn btn-outline-primary btn-sm mb-0">View Project</button>
+                        <div class="avatar-group mt-2">
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Nick Daniel">
+                            <img alt="Image placeholder" src="../assets/img/team-3.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Peterson">
+                            <img alt="Image placeholder" src="../assets/img/team-4.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Elena Morison">
+                            <img alt="Image placeholder" src="../assets/img/team-1.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Milly">
+                            <img alt="Image placeholder" src="../assets/img/team-2.jpg">
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>*@
+            </div>
+            <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
+              <div class="card card-plain">
+                <div class="card-header">
+                  <h4 class="font-weight-bolder">Send Pay Offer</h4>
+                  <p class="mb-0">Enter Your Estamited Price & Note </p>
+                </div>
+                <div class="card-body">
+                  <form role="form" asp-action="UpdatePayOffer" method="post">
+                      <input type="number" value="@Model.ProductId" hidden readonly />
+                    <div class="input-group input-group-outline mb-3">
+                      <label class="form-label">Price</label>
+                      <input type="number" name="price" value="@Model.ProvidedPrice" class="form-control">
+                    </div>
+                    <div class="input-group input-group-outline mb-3">
+                      <label class="form-label">Offer Title</label>
+                      <input type="text" name="title" value="@Model.Title" class="form-control">
+                    </div>
+                    <div class="input-group input-group-outline mb-3">
+                      <label class="form-label">Note</label>
+                      <input type="text" name="note" value="@Model.Note" class="form-control">
+                    </div>
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Update Offer</button>
+                    </div>
+                  </form>
+                </div>
+                @*<div class="card-footer text-center pt-0 px-lg-2 px-1">
+                  <p class="mb-2 text-sm mx-auto">
+                    Already have an account?
+                    <a href="../pages/sign-in.html" class="text-primary text-gradient font-weight-bold">Sign in</a>
+                  </p>
+                </div>*@
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>

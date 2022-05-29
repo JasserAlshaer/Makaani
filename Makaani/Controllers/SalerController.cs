@@ -47,16 +47,28 @@ namespace Makaani.Controllers
         {
             var users =_context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("Id")).ToList();
             var login =_context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("Id")).ToList();
-
+            var role = _context.Role.ToList();
             var profile = from u in users
                           join l in login
                           on u.UserId equals l.UserId
+                          join r in role on l.RoleId equals r.RoleId
                           select new ProfileU
                           {
                               User = u,
-                              Login =l
+                              Login =l,
+                              Role=r
                           };
-            return View(profile);
+            var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("Id")).ToList();
+            var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var myFollower = from f in follower
+                             join u in user on f.FirstUserId equals u.UserId
+                             select new Followers
+                             {
+                                 Follower = f,
+                                 User = u
+                             };
+            ViewBag.Follower = myFollower;
+            return View(profile.ElementAt(0));
         }
 
         public IActionResult MyProducts()
@@ -354,10 +366,7 @@ namespace Makaani.Controllers
             }
             return RedirectToAction("LoveList");
         }
-        public IActionResult MyAds()
-        {
-            return View(_context.Ads.Where(x=> x.UserId==HttpContext.Session.GetInt32("Id")).ToList());
-        }
+       
         [HttpPost]
         public async Task<IActionResult> InsertAds(int productId, string title, double price, string description
             , int promationId, int OfferId,int categotyId,int departmentId)
@@ -473,15 +482,16 @@ namespace Makaani.Controllers
 
         public IActionResult SendPayOffer(int adsId)
         {
-            return View();
+            return View(_context.Ads.Where(x=>x.AdsId==adsId).SingleOrDefault());
         }
 
        [HttpPost]
-        public IActionResult SendPayOffer(int productId,string note,double ? price =0)
+        public IActionResult SendPayOffer(int productId,string note, string title,double ? price =0)
         {
             PayingOffer payingOffer = new PayingOffer();
             payingOffer.ProductId = productId;
             payingOffer.Note = note;
+            payingOffer.Title = title;
             payingOffer.ProvidedPrice= price;
             payingOffer.OfferDate= DateTime.Now;
             payingOffer.UserId= HttpContext.Session.GetInt32("Id");
@@ -489,7 +499,19 @@ namespace Makaani.Controllers
             _context.SaveChanges();
             return RedirectToAction("PayingOffer", payingOffer);
         }
-        public IActionResult UpdatePayOffer(int offerId, string note, double? price = 0)
+        public IActionResult UpdatePayOffer(int offerId)
+        {
+            var payingOffer = _context.PayingOffer.Where(x => x.PayingOfferId == offerId).Single();
+            if (payingOffer == null)
+            {
+                return NotFound();
+            }
+            return View(payingOffer);
+        }
+
+
+       [HttpPost]
+        public IActionResult UpdatePayOffer(int offerId, string note, string title, double? price = 0 )
         {
             var payingOffer = _context.PayingOffer.Where(x => x.PayingOfferId == offerId).Single();
             if (payingOffer == null)
