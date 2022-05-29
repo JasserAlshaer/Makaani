@@ -21,12 +21,14 @@
 <body>
 
 	<section class="h-100 h-custom">
+		<form asp-action="Register" method="post">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12">
         <div class="card card-registration card-registration-2" style="border-radius: 15px;">
           <div class="card-body p-0">
             <div class="row g-0">
+				
               <div class="col-lg-6">
                 <div class="p-5">
                   <h3 class="fw-normal mb-5" style="color: #00B98E;">General Infomation</h3>
@@ -35,7 +37,7 @@
                     <div class="col-md-6 mb-4 pb-2">
 
                       <div class="form-outline">
-                        <input type="text" id="form3Examplev2" class="form-control form-control-lg" />
+                        <input type="text" required name="first" id="form3Examplev2" class="form-control form-control-lg" />
                         <label class="form-label" for="form3Examplev2">First name</label>
                       </div>
 
@@ -43,73 +45,73 @@
                     <div class="col-md-6 mb-4 pb-2">
 
                       <div class="form-outline">
-                        <input type="text" id="form3Examplev3" class="form-control form-control-lg" />
+                        <input type="text" required id="form3Examplev3" name="second" class="form-control form-control-lg" />
                         <label class="form-label" for="form3Examplev3">Last name</label>
                       </div>
 
                     </div>
                   </div>
-
+				  <div class="mb-4 pb-2">
+                    <div class="form-outline">
+                      <input type="number" maxlength="10" required name="Phone" id="form3Examplev4" class="form-control form-control-lg" />
+                      <label class="form-label" for="form3Examplev4">Phone Number</label>
+                    </div>
+                  </div>
 
                   <div class="mb-4 pb-2">
                     <div class="form-outline">
-                      <input type="text" id="form3Examplev4" class="form-control form-control-lg" />
-                      <label class="form-label" for="form3Examplev4">Position</label>
+                      <input type="date" required name="BirthDate" id="form3Examplev4" class="form-control form-control-lg" />
+                      <label class="form-label" for="form3Examplev4">Birth Date</label>
                     </div>
                   </div>
 
-                  <div class="row">
-                    <div class="col-md-6 mb-4 pb-2 mb-md-0 pb-md-0">
-
-                      <div class="form-outline">
-                        <input type="text" id="form3Examplev5" class="form-control form-control-lg" />
-                        <label class="form-label" for="form3Examplev5">Bussines Arena</label>
-                      </div>
-
-                    </div>
-                   
-                  </div>
 
                 </div>
               </div>
               <div class="col-lg-6 bg-indigo text-white">
-                <div class="p-5">
-                  <h3 class="fw-normal mb-5">Contact Details</h3>
+                  <div class="p-5">
+                      <h3 class="fw-normal mb-5">Authntication Details</h3>
 
-                  <div class="mb-4 pb-2">
-                    <div class="form-outline form-white">
-                      <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
-                      <label class="form-label" for="form3Examplea2">Street + Nr</label>
-                    </div>
+
+
+
+
+                      <div class="mb-4 pb-2">
+                          <div class="form-outline form-white">
+                              <input type="email" required name="Email" id="form3Examplea6" class="form-control form-control-lg" />
+                              <label class="form-label" for="form3Examplea6">Email</label>
+                          </div>
+                      </div>
+
+
+                      <div class="mb-4 pb-2">
+                          <div class="form-outline form-white">
+                              <input type="password" required name="Password" id="form3Examplea2" class="form-control form-control-lg" />
+                              <label class="form-label" for="form3Examplea2">Password</label>
+                          </div>
+                      </div>
+
+
+
+
+
+
+
+                      <button type="submit" class="btn btn-light btn-lg"
+                              data-mdb-ripple-color="dark">
+                          Register
+                      </button>
+
                   </div>
-
-
-                 
-
-                  <div class="mb-4 pb-2">
-                    <div class="form-outline form-white">
-                      <input type="text" id="form3Examplea6" class="form-control form-control-lg" />
-                      <label class="form-label" for="form3Examplea6">Country</label>
-                    </div>
-                  </div>
-
-
-
-
-
-                  
-
-                  <button type="submit" class="btn btn-light btn-lg"
-                    data-mdb-ripple-color="dark">Register</button>
-
-                </div>
               </div>
+			 
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+   </form>
 </section>
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>

@@ -393,6 +393,13 @@ namespace Makaani.Controllers
             var offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).ToList();
             return View(offers);
         }
+
+        public IActionResult SendPayOffer(int adsId)
+        {
+            return View();
+        }
+
+       [HttpPost]
         public IActionResult SendPayOffer(int productId,string note,double ? price =0)
         {
             PayingOffer payingOffer = new PayingOffer();
