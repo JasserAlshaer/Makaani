@@ -14,6 +14,7 @@ namespace Makaani.Models
         public string Description { get; set; }
         public int? RateCount { get; set; }
         public int? UserId { get; set; }
+        public bool? IsAccepted { get; set; }
 
         public virtual User User { get; set; }
     }

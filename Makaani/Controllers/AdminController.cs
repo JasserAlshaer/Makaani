@@ -15,63 +15,18 @@ namespace Makaani.Controllers
         }
         public IActionResult Index()
         {
-            var Pmedia = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
-            var Pfinishes = _context.Finishes.ToList();
-            var category = _context.Category.ToList();
-            var department = _context.Department.ToList();
-            var Place = _context.Provinces.ToList();
-            var location = _context.Location.ToList();
-            var users = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
-            var promoution = _context.Promotion.ToList();
-            var offer = _context.Offer.ToList();
-            var media = _context.Media.ToList();
-            var finishes = _context.Finishes.ToList();
-            var product = _context.Product.ToList();
-            var ads = _context.Ads.ToList();
-
-
-            var estateCardJoinData = from p in product
-                                     join
-                                     f in finishes on p.FinishesId equals f.FinishesId
-                                     join
-                                      m in media on p.ProductId equals m.ProductId
-                                     select new EstateMain
-                                     {
-                                         Product = p,
-                                         Finishes = f,
-                                         Media = m,
-
-                                     };
-
-            var estateFullAdsInfo = from a in ads
-                                    join
-                                    u in users on a.UserId equals u.UserId
-                                    join
-                                    l in location on a.LocationId equals l.LoactionId
-                                    join
-                                    d in department on a.DepartmentId equals d.DepartmentId
-                                    join
-                                    c in category on a.CategoryId equals c.CategoryId
-                                    join
-                                    e in estateCardJoinData on a.ProductId equals e.Product.ProductId
-
-
-
-                                    select new AdsCard
-                                    {
-                                        Ads = a,
-                                        User = u,
-                                        Location = l,
-                                        Department = d,
-                                        Category = c,
-                                        EstateMain = e,
-
-                                    };
-            return View(estateFullAdsInfo);
+            ViewBag.Ads = _context.Ads.Count();
+            ViewBag.Customer = _context.Login.Where(x=>x.RoleId==1).Count();
+            ViewBag.Testimonoials = _context.Testimonails.Count();
+            ViewBag.Saler = _context.Login.Where(x => x.RoleId == 2).Count();
+            ViewBag.Searches = _context.UserSearch.ToList(); 
+            ViewBag.Last= _context.LastViewAds.Count();
+            ViewBag.PayOffer=_context.PayingOffer.Count();
+            return View();
         }
         public IActionResult Users()
         {
-            return View(_context.User.ToList());
+            return View(_context.User.OrderByDescending(x=>x.JoiningDate).ToList());
         }
         public IActionResult Testimonials()
         {
@@ -88,23 +43,63 @@ namespace Makaani.Controllers
                             };
             return View(UserFeeds);
         }
+        public IActionResult RejectTesitominals(int id)
+        {
+            var test = _context.Testimonails.Where(x => x.TestimonailsId == id).SingleOrDefault();
+            if (test == null)
+            {
+                return NotFound();
+            }
+            test.IsAccepted = false;
+            _context.Update(test);
+            _context.SaveChanges();
+            return RedirectToAction("Testimonials");
+        }
+
+        public IActionResult AcceptTesitominals(int id)
+        {
+            var test=_context.Testimonails.Where(x=>x.TestimonailsId == id).SingleOrDefault();
+            if (test == null)
+            {
+                return NotFound();
+            }
+            test.IsAccepted = true;
+            _context.Update(test);
+            _context.SaveChanges();
+            
+            return RedirectToAction("Testimonials");
+        }
         public IActionResult Products()
         {
+            var EsatateCategory = _context.Category.ToList();
+            var Place = _context.Provinces.ToList();
+
             var media = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
             var finishes = _context.Finishes.ToList();
             var product = _context.Product.ToList();
-
+            var ads = _context.Ads.ToList();
+            var depar = _context.Department.ToList();
+            var owners = _context.User.ToList();
+            var locations = _context.Location.ToList();
 
             var estateCardJoinData = from p in product
                                      join
-                    f in finishes on p.FinishesId equals f.FinishesId
+                                     f in finishes on p.FinishesId equals f.FinishesId
                                      join
-                                  m in media on p.ProductId equals m.ProductId
+                                      m in media on p.ProductId equals m.ProductId
+                                     join a in ads on p.ProductId equals a.ProductId
+                                     join o in owners on a.UserId equals o.UserId
+                                     join d in depar on a.DepartmentId equals d.DepartmentId
+                                     join l in locations on a.LocationId equals l.LoactionId
                                      select new EstateMain
                                      {
                                          Product = p,
                                          Finishes = f,
                                          Media = m,
+                                         Ads = a,
+                                         User = o,
+                                         Department = d,
+                                         Location = l
 
                                      };
             return View(estateCardJoinData);

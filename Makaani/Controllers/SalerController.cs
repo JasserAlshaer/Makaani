@@ -61,7 +61,38 @@ namespace Makaani.Controllers
 
         public IActionResult MyProducts()
         {
-           return View(_context.Product.Where(x=>x.OwnerId==HttpContext.Session.GetInt32("Id")).ToList());
+            var EsatateCategory = _context.Category.ToList();
+            var Place = _context.Provinces.ToList();
+
+            var media = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
+            var finishes = _context.Finishes.ToList();
+            var product = _context.Product.Where(x => x.OwnerId == HttpContext.Session.GetInt32("Id")).ToList();
+            var ads = _context.Ads.Where(x => x.UserId== HttpContext.Session.GetInt32("Id")).ToList();
+            var depar = _context.Department.ToList();
+            var owners = _context.User.Where(x => x.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+            var locations = _context.Location.ToList();
+
+            var estateCardJoinData = from p in product
+                                     join
+                                     f in finishes on p.FinishesId equals f.FinishesId
+                                     join
+                                      m in media on p.ProductId equals m.ProductId
+                                     join a in ads on p.ProductId equals a.ProductId
+                                     join o in owners on a.UserId equals o.UserId
+                                     join d in depar on a.DepartmentId equals d.DepartmentId
+                                     join l in locations on a.LocationId equals l.LoactionId
+                                     select new EstateMain
+                                     {
+                                         Product = p,
+                                         Finishes = f,
+                                         Media = m,
+                                         Ads = a,
+                                         User = o,
+                                         Department = d,
+                                         Location = l
+
+                                     };
+            return View(estateCardJoinData);
         }
         [HttpPost]
         public IActionResult InsertProducts(double area,int bathes,int bedroom,int living,int ludary

@@ -300,7 +300,12 @@ m in media on p.ProductId equals m.ProductId
                 }
                 else
                 {
+
                     HttpContext.Session.SetInt32("Id", (int)login.UserId);
+                    if (login.RoleId == 3)
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
                     return RedirectToAction("Index", "Saler");
                 }
             }
@@ -314,6 +319,10 @@ m in media on p.ProductId equals m.ProductId
                 else
                 {
                     HttpContext.Session.SetInt32("Id",(int)login.UserId);
+                    if (login.RoleId == 3)
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
                     return RedirectToAction("Index", "Saler");
                 }
             }
