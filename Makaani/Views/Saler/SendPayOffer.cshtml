@@ -51,8 +51,8 @@
                   <p class="mb-0">Enter Your Estamited Price & Note </p>
                 </div>
                 <div class="card-body">
-                  <form role="form" asp-action="SendPayOffer" method="post">
-                      <input type="number" value="@Model.ProductId" hidden readonly />
+                  <form  asp-action="SendPayOffer" method="post">
+                      <input type="number" name="productId" value="@Model.ProductId" hidden readonly />
                     <div class="input-group input-group-outline mb-3">
                       <label class="form-label">Price</label>
                       <input type="number" name="price" class="form-control">

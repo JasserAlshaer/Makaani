@@ -335,10 +335,20 @@ namespace Makaani.Controllers
         }
         public IActionResult InsertToLoveList(int productId)
         {
-            var recorde = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("Id")).Single();
+            var recorde = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("Id")).SingleOrDefault();
             if (recorde == null)
             {
-                return NotFound();
+                LoveList loveList=new LoveList();
+                loveList.UserId =(int) HttpContext.Session.GetInt32("Id");
+                _context.Add(loveList);
+                _context.SaveChanges();
+
+
+                LovedProductList lovedProduct = new LovedProductList();
+                lovedProduct.ProductId = productId;
+                lovedProduct.LoveListId = _context.LoveList.OrderByDescending(x=>x.LoveListId).First().LoveListId;
+                _context.Add(lovedProduct);
+                _context.SaveChanges();
             }
             else
             {
@@ -482,7 +492,8 @@ namespace Makaani.Controllers
 
         public IActionResult SendPayOffer(int adsId)
         {
-            return View(_context.Ads.Where(x=>x.AdsId==adsId).SingleOrDefault());
+            var ads = _context.Ads.Where(x => x.AdsId == adsId).SingleOrDefault();
+            return View(ads);
         }
 
        [HttpPost]

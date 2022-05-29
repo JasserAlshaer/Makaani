@@ -66,8 +66,17 @@
 					      </div>
 						
 						<div class="action">
-							<button class="add-to-cart btn btn-default" type="button" data-toggle="modal" data-target="#myModal">Send Pay Offer</button>
-							<button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
+							<button class="add-to-cart btn btn-default" type="button" >
+								<a asp-controller="Saler" asp-action="SendPayOffer"  asp-route-adsId="@Model.ElementAt(0).Ads.AdsId">
+									Send Pay Offer
+								</a>
+								</button>
+							<button class="like btn btn-default" type="button">
+								<a asp-controller="Saler" asp-action="InsertToLoveList"  asp-route-id="@Model.ElementAt(0).Ads.ProductId">
+									<span class="fa fa-heart"></span>
+								</a>
+							
+								</button>
 						</div>
 					</div>
 				</div>
