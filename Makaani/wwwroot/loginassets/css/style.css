@@ -9,7 +9,14 @@ p {
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: "Roboto", sans-serif; }
-
+.bckBtn{
+    color:white;
+    text-decoration:none;
+}
+.bckBtn :hover{
+    color: white;
+    text-decoration: none;
+}
 a {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
