@@ -242,7 +242,7 @@ m in media on p.ProductId equals m.ProductId
             return View(_context.Category.ToList());
         }
 
-        public IActionResult TopSalers()
+        public IActionResult TopSallers()
         {
             var ads=_context.Ads.ToList();
             var users=_context.User.ToList();   
@@ -316,7 +316,7 @@ m in media on p.ProductId equals m.ProductId
                     {
                         return RedirectToAction("Index", "Admin");
                     }
-                    return RedirectToAction("Index", "Saler");
+                    return RedirectToAction("Index", "Saller");
                 }
             }
             else
@@ -333,7 +333,7 @@ m in media on p.ProductId equals m.ProductId
                     {
                         return RedirectToAction("Index", "Admin");
                     }
-                    return RedirectToAction("Index", "Saler");
+                    return RedirectToAction("Index", "Saller");
                 }
             }
             

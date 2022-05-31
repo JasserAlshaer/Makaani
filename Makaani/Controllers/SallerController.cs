@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace Makaani.Controllers
 {
-    public class SalerController : Controller
+    public class SallerController : Controller
     {
         private readonly MakaniContext _context;
         private readonly IWebHostEnvironment _env;
 
         public static int currentProjectId;
         public static int currentLocationId;
-        public SalerController(MakaniContext context, IWebHostEnvironment environment)
+        public SallerController(MakaniContext context, IWebHostEnvironment environment)
         {
             _context = context;
             _env = environment;
@@ -521,7 +521,7 @@ namespace Makaani.Controllers
 
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction("MyAds");
+                return RedirectToAction("MyProducts");
             }
             else
             {
@@ -552,7 +552,7 @@ namespace Makaani.Controllers
             }
 
                 await _context.SaveChangesAsync();
-               return RedirectToAction("MyAds");
+               return RedirectToAction("MyProducts");
         }
         [HttpPost]
         public async Task<IActionResult> UpdateAdsLocationInfo(int adsId,string label , string mapslink
@@ -577,7 +577,7 @@ namespace Makaani.Controllers
                 ad.LocationId=_context.Location.OrderByDescending(x=>x.LoactionId).First().LoactionId;
                 _context.Update(ad);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("MyAds");
+                return RedirectToAction("MyProducts");
             }
             else
             {

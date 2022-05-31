@@ -67,12 +67,12 @@
 						
 						<div class="action">
 							<button class="add-to-cart btn btn-default" type="button" >
-								<a asp-controller="Saler" asp-action="SendPayOffer"  asp-route-adsId="@Model.ElementAt(0).Ads.AdsId">
+								<a asp-controller="Saller" asp-action="SendPayOffer"  asp-route-adsId="@Model.ElementAt(0).Ads.AdsId">
 									Send Pay Offer
 								</a>
 								</button>
 							<button class="like btn btn-default" type="button">
-								<a asp-controller="Saler" asp-action="InsertToLoveList"  asp-route-id="@Model.ElementAt(0).Ads.ProductId">
+								<a asp-controller="Saller" asp-action="InsertToLoveList"  asp-route-id="@Model.ElementAt(0).Ads.ProductId">
 									<span class="fa fa-heart"></span>
 								</a>
 							

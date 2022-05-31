@@ -46,9 +46,9 @@
         <!-- Navbar Start -->
         <div class="container-fluid nav-bar bg-transparent">
             <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
-                <a href="index.html" class="navbar-brand d-flex align-items-center text-center">
+                <a asp-action="Index" class="navbar-brand d-flex align-items-center text-center">
                     <div class="icon p-2 me-2">
-                        <img class="img-fluid" src="~/MakaniAssets/img/icon-deal.png" alt="Icon" style="width: 30px; height: 30px;">
+                        <img class="img-fluid" src="~/makaniLogo.jpg" alt="Icon" style="width: 30px; height: 30px;">
                     </div>
                     <h1 class="m-0 text-primary">Makani</h1>
                 </a>
@@ -65,7 +65,7 @@
                             <div class="dropdown-menu rounded-0 m-0">
                                 <a  asp-controller="Home" asp-action="Estate" class="dropdown-item">Estate List</a>
                                 <a asp-controller="Home" asp-action="Categorys" class="dropdown-item">Estate Category</a>
-                                <a asp-controller="Home" asp-action="TopSalers" class="dropdown-item">Estate Best Saller</a>
+                                <a asp-controller="Home" asp-action="TopSallers" class="dropdown-item">Estate Best Saller</a>
                             </div>
                         </div>
                        <a asp-action="Testimonials" class="nav-item nav-link">Testimonials</a>
