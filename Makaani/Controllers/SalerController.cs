@@ -279,7 +279,7 @@ namespace Makaani.Controllers
                     String wRootPath = _env.WebRootPath;
                     
                     String fileName = Guid.NewGuid().ToString() + "_" + image.FileName;
-                    var path1 = Path.Combine(wRootPath + "/Uploads", fileName);
+                    var path1 = Path.Combine(wRootPath + "/uploads", fileName);
                   
                     using (var filestream = new FileStream(path1, FileMode.Create))
                     {
@@ -314,7 +314,7 @@ namespace Makaani.Controllers
             {
                 return NotFound();
             }
-            return View();
+            return RedirectToAction("Profile");
         }
 
         public IActionResult Follower()
