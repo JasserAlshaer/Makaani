@@ -1,0 +1,32 @@
+﻿@{
+     Layout = "_LayoutSaler";
+}
+<div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-12">
+              <div class="card card-plain">
+                <div class="card-header">
+                  <h4 class="font-weight-bolder">Insert Testimonials</h4>
+                  <p class="mb-0">Enter Your Review & Suggestation For Makani </p>
+                </div>
+                <div class="card-body">
+                  <form  asp-action="InsertTesti" method="post">
+                      
+                    <div class="input-group input-group-outline mb-3">
+                     
+                      <input type="text" name="text" placeholder="Text" class="form-control" required>  
+                    </div>
+                    <div class="input-group input-group-outline mb-3">
+                  
+                      <input type="text" name="desc" placeholder="Description" class="form-control">
+                    </div>
+                    
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Save Testimonials</button>
+                    </div>
+                  </form>
+                </div>
+               
+              </div>
+            </div>
+            </div>

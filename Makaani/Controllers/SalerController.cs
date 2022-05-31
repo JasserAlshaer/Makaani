@@ -26,13 +26,13 @@ namespace Makaani.Controllers
         public IActionResult Index()
         {
             
-            ViewBag.Ads = _context.Ads.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).Count();
-            ViewBag.Offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).Count();
-            ViewBag.Follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("Id")).Count();
-            ViewBag.LoveList = _context.LoveList.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).Count();
+            ViewBag.Ads = _context.Ads.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).Count();
+            ViewBag.Offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).Count();
+            ViewBag.Follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("UserId")).Count();
+            ViewBag.LoveList = _context.LoveList.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).Count();
             
             var latestOffers=_context.PayingOffer.ToList();
-            var product=_context.Product.Where(a => a.OwnerId == HttpContext.Session.GetInt32("Id")).ToList();
+            var product=_context.Product.Where(a => a.OwnerId == HttpContext.Session.GetInt32("UserId")).ToList();
             var users = _context.User.ToList();
 
             var providedOffers=from l in latestOffers join p in product
@@ -48,8 +48,8 @@ namespace Makaani.Controllers
         }
         public IActionResult Profile()
         {
-            var users =_context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("Id")).ToList();
-            var login =_context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+            var users =_context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+            var login =_context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
             var role = _context.Role.ToList();
             var profile = from u in users
                           join l in login
@@ -61,8 +61,8 @@ namespace Makaani.Controllers
                               Login =l,
                               Role=r
                           };
-            var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("Id")).ToList();
-            var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("UserId")).ToList();
+            var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
             var myFollower = from f in follower
                              join u in user on f.FirstUserId equals u.UserId
                              select new Followers
@@ -71,7 +71,8 @@ namespace Makaani.Controllers
                                  User = u
                              };
             ViewBag.Follower = myFollower;
-            return View(profile.ElementAt(0));
+            var pro = profile.ElementAt(0);
+            return View(pro);
         }
 
         public IActionResult MyProducts()
@@ -81,10 +82,10 @@ namespace Makaani.Controllers
 
             var media = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
             var finishes = _context.Finishes.ToList();
-            var product = _context.Product.Where(x => x.OwnerId == HttpContext.Session.GetInt32("Id")).ToList();
-            var ads = _context.Ads.Where(x => x.UserId== HttpContext.Session.GetInt32("Id")).ToList();
+            var product = _context.Product.Where(x => x.OwnerId == HttpContext.Session.GetInt32("UserId")).ToList();
+            var ads = _context.Ads.Where(x => x.UserId== HttpContext.Session.GetInt32("UserId")).ToList();
             var depar = _context.Department.ToList();
-            var owners = _context.User.Where(x => x.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+            var owners = _context.User.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
             var locations = _context.Location.ToList();
 
             var estateCardJoinData = from p in product
@@ -262,8 +263,8 @@ namespace Makaani.Controllers
         }
         public IActionResult UpdateProfile()
         {
-            var users = _context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("Id")).ToList();
-            var login = _context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+            var users = _context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+            var login = _context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
             var role = _context.Role.ToList();
             var profile = from u in users
                           join l in login
@@ -275,8 +276,8 @@ namespace Makaani.Controllers
                               Login = l,
                               Role = r
                           };
-            var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("Id")).ToList();
-            var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("UserId")).ToList();
+            var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
             var myFollower = from f in follower
                              join u in user on f.FirstUserId equals u.UserId
                              select new Followers
@@ -291,8 +292,8 @@ namespace Makaani.Controllers
         public async Task<IActionResult> UpdateProfile(IFormFile image,string name,string address
             ,string password,string whatsUpLink,string phone,string email)
         {
-            var users = _context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("Id")).Single();
-            var login = _context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("Id")).Single();
+            var users = _context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).Single();
+            var login = _context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).Single();
             if(users!=null && login != null)
             {
                 if(image != null)
@@ -340,8 +341,8 @@ namespace Makaani.Controllers
 
         public IActionResult Follower()
         {
-            var follower = _context.Follower.Where(a => a.FirstUserId == HttpContext.Session.GetInt32("Id")).ToList();
-            var user =_context.User.Where(x=>x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var follower = _context.Follower.Where(a => a.FirstUserId == HttpContext.Session.GetInt32("UserId")).ToList();
+            var user =_context.User.Where(x=>x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
             var myFollower = from f in follower
                              join u in user on f.FirstUserId equals u.UserId
                              select new Followers
@@ -354,7 +355,7 @@ namespace Makaani.Controllers
         public IActionResult FollowNewUser(int seondUserId)
         {
             Follower follower = new Follower();
-            follower.FirstUserId=HttpContext.Session.GetInt32("Id");
+            follower.FirstUserId=HttpContext.Session.GetInt32("UserId");
             follower.SecondUserId = seondUserId;
             _context.Add(follower);
             _context.SaveChanges();
@@ -377,8 +378,8 @@ namespace Makaani.Controllers
         }
         public IActionResult LastViewAds()
         {
-            var last = _context.LastViewAds.Where(x => x.UserId == HttpContext.Session.GetInt32("Id")).ToList();
-            var ads= _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var last = _context.LastViewAds.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+            var ads= _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
 
             var lastViewAds = from l in last
                               join a in ads
@@ -392,7 +393,7 @@ namespace Makaani.Controllers
         }
         public async Task<IActionResult> ClearLastViewAds()
         {
-            List<LastViewAds>lastViewAds=_context.LastViewAds.Where(l=>l.UserId==HttpContext.Session.GetInt32("Id")).ToList();
+            List<LastViewAds>lastViewAds=_context.LastViewAds.Where(l=>l.UserId==HttpContext.Session.GetInt32("UserId")).ToList();
             foreach(var lastViewAd in lastViewAds)
             {
                 _context.Remove(lastViewAd);
@@ -417,7 +418,7 @@ namespace Makaani.Controllers
 
         public IActionResult LoveList()
         {
-            int lovelistId=_context.LoveList.Where(x=>x.UserId == HttpContext.Session.GetInt32("Id")).Single().LoveListId;
+            int lovelistId=_context.LoveList.Where(x=>x.UserId == HttpContext.Session.GetInt32("UserId")).Single().LoveListId;
             var loveItems = _context.LovedProductList.Where(x => x.LoveListId == lovelistId).ToList();
             var ads=_context.Ads.ToList();
             var product = _context.Product.ToList();
@@ -436,7 +437,7 @@ namespace Makaani.Controllers
         }
         public IActionResult InsertToLoveList(int productId)
         {
-            var recorde = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("Id")).SingleOrDefault();
+            var recorde = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).SingleOrDefault();
             if (recorde == null)
             {
                 LoveList loveList=new LoveList();
@@ -579,10 +580,10 @@ namespace Makaani.Controllers
 
         public IActionResult OutGoingPayingOffer()
         {
-            var offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("Id")).ToList();
-            var users = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
-            var product = _context.Product.Where(x => x.OwnerId != HttpContext.Session.GetInt32("Id")).ToList();
-            var ads = _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+            var users = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
+            var product = _context.Product.Where(x => x.OwnerId != HttpContext.Session.GetInt32("UserId")).ToList();
+            var ads = _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
 
             var recivedPayOffers = from o in offers
                                    join p in product on o.ProductId equals p.ProductId
@@ -614,7 +615,7 @@ namespace Makaani.Controllers
             payingOffer.Title = title;
             payingOffer.ProvidedPrice= price;
             payingOffer.OfferDate= DateTime.Now;
-            payingOffer.UserId= HttpContext.Session.GetInt32("Id");
+            payingOffer.UserId= HttpContext.Session.GetInt32("UserId");
             _context.Add(payingOffer);
             _context.SaveChanges();
             return RedirectToAction("PayingOffer", payingOffer);
@@ -643,7 +644,7 @@ namespace Makaani.Controllers
                 payingOffer.Note = note;
                 payingOffer.ProvidedPrice = price;
                 payingOffer.OfferDate = DateTime.Now;
-                payingOffer.UserId = HttpContext.Session.GetInt32("Id");
+                payingOffer.UserId = HttpContext.Session.GetInt32("UserId");
                 _context.Add(payingOffer);
                 _context.SaveChanges();
             }
@@ -674,7 +675,7 @@ namespace Makaani.Controllers
         {
             if (deleteAll)
             {
-                List<UserSearch> searches = _context.UserSearch.Where(x=> x.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+                List<UserSearch> searches = _context.UserSearch.Where(x=> x.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
                 foreach (UserSearch search in searches)
                 {
                     _context.Remove(search);
@@ -700,6 +701,25 @@ namespace Makaani.Controllers
             return RedirectToAction("Searches");
         }
      
+        public IActionResult InsertTesti()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult InsertTesti(string text,string desc)
+        {
+            Testimonails testimonails = new Testimonails(); 
+            testimonails.Title = text;
+            testimonails.Description= desc;
+            testimonails.UserId= HttpContext.Session.GetInt32("UserId");
+            testimonails.IsAccepted = false;
+
+            _context.Add(testimonails);
+            _context.SaveChanges();
+
+            return View("Index");
+        }
 
         public IActionResult Logout()
         {
