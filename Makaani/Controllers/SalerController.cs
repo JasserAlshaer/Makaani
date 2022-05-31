@@ -106,6 +106,59 @@ namespace Makaani.Controllers
                                      };
             return View(estateCardJoinData);
         }
+
+        public IActionResult InsertMedia(int productId)
+        {
+            ViewBag.proId=productId;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> InsertMedia(IFormFile image,int mediaType,bool ismain,int product)
+        {
+            if(image != null)
+            {
+                String wRootPath = _env.WebRootPath;
+
+                String fileName = Guid.NewGuid().ToString() + "_" + image.FileName;
+                var path1 = Path.Combine(wRootPath + "/Uploads", fileName);
+
+                using (var filestream = new FileStream(path1, FileMode.Create))
+                {
+                    await image.CopyToAsync(filestream);
+                }
+
+                Media media = new Media();
+                media.MediaTypeId= mediaType;
+                media.IsMainImage = ismain;
+                media.Path = fileName;
+                media.ProductId = product;
+                _context.Add(media);
+                await _context.SaveChangesAsync();
+            }
+            return View();
+        }
+
+        public IActionResult InsertLoactions()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult InsertLoactions(string label,string mapsLink,string note)
+        {
+            Location location = new Location();
+            location.MapsLink = mapsLink;
+            location.LoactionLabel = label;
+            location.Notes = note;
+            _context.Add(location);
+            _context.SaveChanges();
+
+            return View();
+        }
+        public IActionResult InsertProducts()
+        {
+
+            return View(_context.Finishes.ToList());
+        }
         [HttpPost]
         public IActionResult InsertProducts(double area,int bathes,int bedroom,int living,int ludary
             ,int grage,int kitchen,int store,bool isBalcon, bool isGarden, bool isElvator,
@@ -376,10 +429,17 @@ namespace Makaani.Controllers
             }
             return RedirectToAction("LoveList");
         }
+        //step-4
+        public IActionResult InsertAds(int locationId,int productId)
+        {
+            ViewBag.LocationId = locationId;
+            ViewBag.ProductId = productId;
+            return View();
+        }
        
         [HttpPost]
         public async Task<IActionResult> InsertAds(int productId, string title, double price, string description
-            , int promationId, int OfferId,int categotyId,int departmentId)
+            , int promationId, int OfferId,int categotyId,int departmentId,int locationId)
         {
             int id = (int)HttpContext.Session.GetInt32("UserId");
             if(id != 0)
@@ -397,7 +457,8 @@ namespace Makaani.Controllers
                 ad.PromotionId = promationId;
                 ad.DepartmentId = departmentId;
                 ad.Title = title;
-
+                ad.LocationId = locationId;
+                
                 _context.Ads.Add(ad);
 
 
