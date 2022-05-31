@@ -1,4 +1,5 @@
-﻿
+﻿@model Makaani.Models.ProfileU;
+
 @{
      Layout = "_LayoutSaler";
 }
@@ -10,21 +11,31 @@
                   <p class="mb-0">Enter Your Estamited Price & Note </p>
                 </div>
                 <div class="card-body">
-                  <form  asp-action="SendPayOffer" method="post">
-                      <input type="number" name="productId" value="" hidden readonly />
+                  <form  asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
                     <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Price</label>
-                      <input type="number" name="price" class="form-control">
-                    </div>
-                    <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Offer Title</label>
-                      <input type="text" name="title" class="form-control">
-                    </div>
-                    <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Note</label>
-                      <input type="text" name="note" class="form-control">
-                    </div>
+                        @if (@Model.User.ProfileImage!=null) {
+                            <div>
+                            <img src="~/uploads/@Model.User.ProfileImage" class="border-radius-lg shadow-sm" style="width:50%;"/>
+                            </div>
 
+                        }
+                        <input type="file" name="image" class="form-control">
+                    </div>
+                    <div class="input-group input-group-outline mb-3">
+                      <input type="text" name="name" class="form-control"value="@Model.User.FullName">
+                    </div>
+                     <div class="input-group input-group-outline mb-3">
+                      <input type="text" name="address" class="form-control" value="@Model.User.Address" placeholder="Adress">
+                    </div>
+                     <div class="input-group input-group-outline mb-3">
+                      <input type="password" name="password" class="form-control" value="@Model.Login.Password">
+                    </div>
+                     <div class="input-group input-group-outline mb-3">
+                      <input type="number" name="phone" class="form-control" value="@Model.Login.Phone">
+                    </div>
+                     <div class="input-group input-group-outline mb-3">
+                      <input type="email" name="email" class="form-control"value="@Model.Login.Email">
+                    </div>
                     <div class="text-center">
                       <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Send Offer</button>
                     </div>

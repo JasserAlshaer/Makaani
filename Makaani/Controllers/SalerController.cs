@@ -335,7 +335,7 @@ namespace Makaani.Controllers
             {
                 return NotFound();
             }
-            return View();
+            return RedirectToAction("Profile");
         }
 
         public IActionResult Follower()
