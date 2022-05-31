@@ -239,6 +239,33 @@ namespace Makaani.Controllers
             _context.SaveChangesAsync();
             return RedirectToAction("MyProducts");
         }
+        public IActionResult UpdateProfile()
+        {
+            var users = _context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+            var login = _context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("Id")).ToList();
+            var role = _context.Role.ToList();
+            var profile = from u in users
+                          join l in login
+                          on u.UserId equals l.UserId
+                          join r in role on l.RoleId equals r.RoleId
+                          select new ProfileU
+                          {
+                              User = u,
+                              Login = l,
+                              Role = r
+                          };
+            var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("Id")).ToList();
+            var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("Id")).ToList();
+            var myFollower = from f in follower
+                             join u in user on f.FirstUserId equals u.UserId
+                             select new Followers
+                             {
+                                 Follower = f,
+                                 User = u
+                             };
+            ViewBag.Follower = myFollower;
+            return View(profile.ElementAt(0));
+        }
         [HttpPost]
         public async Task<IActionResult> UpdateProfile(IFormFile image,string name,string address
             ,string password,string whatsUpLink,string phone,string email)
