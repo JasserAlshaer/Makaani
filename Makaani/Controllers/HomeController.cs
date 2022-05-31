@@ -306,7 +306,7 @@ m in media on p.ProductId equals m.ProductId
                 var login = _context.Login.Where(x => x.Email == accountUser && x.Password == Password).SingleOrDefault();
                 if (login == null)
                 {
-                    return Unauthorized();
+                    return RedirectToAction("Error");
                 }
                 else
                 {
@@ -324,7 +324,7 @@ m in media on p.ProductId equals m.ProductId
                 var login = _context.Login.Where(x => x.Phone == accountUser && x.Password == Password).SingleOrDefault();
                 if (login == null)
                 {
-                    return RedirectToAction("");
+                    return RedirectToAction("Error");
                 }
                 else
                 {
