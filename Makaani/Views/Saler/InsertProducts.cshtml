@@ -1,16 +1,17 @@
-﻿@{
+﻿@model IEnumerable<Makaani.Models.Finishes>;
+@{
      Layout = "_LayoutSaler";
 }
 <div class="row">
   <div class="col-xl-12 col-lg-12 col-md-12 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-12">
               <div class="card card-plain">
                 <div class="card-header">
-                  <h4 class="font-weight-bolder">Send Pay Offer</h4>
-                  <p class="mb-0">Enter Your Estamited Price & Note </p>
+                  <h4 class="font-weight-bolder">Insert Product</h4>
+                  <p class="mb-0">Insert Your Product Information</p>
                 </div>
                 <div class="card-body">
                    
-                  <form  asp-action="SendPayOffer" method="post">
+                  <form  asp-action="InsertProducts" method="post">
                       <input type="number" name="productId" value="" hidden readonly />
                     <div class="col-6 input-group input-group-outline mb-3">
                       <label class="form-label">Area</label>
@@ -111,11 +112,30 @@
                       <label class="form-label">floor</label>
                       <input type="text" pattern="[0-9]+" name="floor" class="form-control" >
                     </div>
+                      <div class="col-6 input-group input-group-outline mb-3">
+                      <label class="form-label"></label>
+                      <select class="form-control" name="finishiesId">
+                          <option value="">Select Finishes</option>
+                          @foreach (var item in Model)
+                         {
+                                <option value="@item.FinishesId">@item.Name</option>
+                         }
+                       
+                     </select>
+                    </div>
 
+                    <div class="col-6 input-group input-group-outline mb-3">
+                      <label class="form-label"></label>
+                      <select class="form-control" name="furniture">
+                          <option value="false">is Havefurniture</option>
+                          <option value="true">Yes</option>
+                          <option value="false">No</option>
+                     </select>
+                    </div>
 
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Send Offer</button>
+                      <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Save Product Information</button>
                     </div>
                   </form>
 

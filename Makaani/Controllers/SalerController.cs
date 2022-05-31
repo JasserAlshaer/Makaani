@@ -14,6 +14,9 @@ namespace Makaani.Controllers
     {
         private readonly MakaniContext _context;
         private readonly IWebHostEnvironment _env;
+
+        public static int currentProjectId;
+        public static int currentLocationId;
         public SalerController(MakaniContext context, IWebHostEnvironment environment)
         {
             _context = context;
@@ -107,10 +110,10 @@ namespace Makaani.Controllers
             return View(estateCardJoinData);
         }
 
-        public IActionResult InsertMedia(int productId)
+        public IActionResult InsertMedia()
         {
-            ViewBag.proId=productId;
-            return View();
+            ViewBag.proId=currentProjectId;
+            return View(_context.MediaType.ToList());
         }
         [HttpPost]
         public async Task<IActionResult> InsertMedia(IFormFile image,int mediaType,bool ismain,int product)
@@ -120,7 +123,7 @@ namespace Makaani.Controllers
                 String wRootPath = _env.WebRootPath;
 
                 String fileName = Guid.NewGuid().ToString() + "_" + image.FileName;
-                var path1 = Path.Combine(wRootPath + "/Uploads", fileName);
+                var path1 = Path.Combine(wRootPath + "/uploads", fileName);
 
                 using (var filestream = new FileStream(path1, FileMode.Create))
                 {
@@ -128,6 +131,7 @@ namespace Makaani.Controllers
                 }
 
                 Media media = new Media();
+                media.MediaId = _context.Media.OrderByDescending(x => x.MediaId).First().MediaId+1;
                 media.MediaTypeId= mediaType;
                 media.IsMainImage = ismain;
                 media.Path = fileName;
@@ -135,7 +139,7 @@ namespace Makaani.Controllers
                 _context.Add(media);
                 await _context.SaveChangesAsync();
             }
-            return View();
+            return RedirectToAction("InsertMedia");
         }
 
         public IActionResult InsertLoactions()
@@ -152,12 +156,24 @@ namespace Makaani.Controllers
             _context.Add(location);
             _context.SaveChanges();
 
-            return View();
+            currentLocationId= _context.Location.OrderByDescending(x => x.LoactionId).First().LoactionId;
+
+            return RedirectToAction("InsertAds");
         }
         public IActionResult InsertProducts()
         {
-
-            return View(_context.Finishes.ToList());
+            int id = (int)HttpContext.Session.GetInt32("UserId");
+            if (id != 0)
+            {
+                var role = _context.Login.Where(x => x.UserId == id).SingleOrDefault();
+                if (role == null || role.RoleId != 2)
+                {
+                    return RedirectToAction("Index");
+                }
+                return View(_context.Finishes.ToList());
+            }
+            return RedirectToAction("Index");
+               
         }
         [HttpPost]
         public IActionResult InsertProducts(double area,int bathes,int bedroom,int living,int ludary
@@ -185,7 +201,12 @@ namespace Makaani.Controllers
             _context.Add(product);
             _context.SaveChanges();
 
-            return RedirectToAction("MyProducts");
+
+            currentProjectId = _context.Product.OrderByDescending(x => x.ProductId).First().ProductId;
+
+            
+
+            return RedirectToAction("InsertMedia");
         }
         public IActionResult UpdateProducts(int productId)
         {
@@ -279,7 +300,7 @@ namespace Makaani.Controllers
                     String wRootPath = _env.WebRootPath;
                     
                     String fileName = Guid.NewGuid().ToString() + "_" + image.FileName;
-                    var path1 = Path.Combine(wRootPath + "/Uploads", fileName);
+                    var path1 = Path.Combine(wRootPath + "/uploads", fileName);
                   
                     using (var filestream = new FileStream(path1, FileMode.Create))
                     {
@@ -457,34 +478,34 @@ namespace Makaani.Controllers
             return RedirectToAction("LoveList");
         }
         //step-4
-        public IActionResult InsertAds(int locationId,int productId)
+        public IActionResult InsertAds()
         {
-            ViewBag.LocationId = locationId;
-            ViewBag.ProductId = productId;
+            ViewBag.cat = _context.Category.ToList();
+            ViewBag.dep = _context.Department.ToList();
             return View();
         }
        
         [HttpPost]
-        public async Task<IActionResult> InsertAds(int productId, string title, double price, string description
-            , int promationId, int OfferId,int categotyId,int departmentId,int locationId)
+        public async Task<IActionResult> InsertAds( string title, double price, string description
+            , int promationId, int OfferId,int categotyId,int departmentId)
         {
             int id = (int)HttpContext.Session.GetInt32("UserId");
             if(id != 0)
             {
                 var role = _context.Login.Where(x => x.UserId == id).SingleOrDefault();
-                if (role == null || role.RoleId!=3)
+                if (role == null || role.RoleId!=2)
                 {
                     return Unauthorized();
                 }
                 Ads ad = new Ads();
-                ad.ProductId = productId;
+                ad.ProductId = currentProjectId;
                 ad.Descrption = description;
                 ad.Price = price;
                 ad.CategoryId = categotyId;
                 ad.PromotionId = promationId;
                 ad.DepartmentId = departmentId;
                 ad.Title = title;
-                ad.LocationId = locationId;
+                ad.LocationId = currentLocationId;
                 
                 _context.Ads.Add(ad);
 

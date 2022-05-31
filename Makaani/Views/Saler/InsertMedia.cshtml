@@ -1,31 +1,53 @@
-﻿@{
+﻿@model IEnumerable<Makaani.Models.MediaType>;
+@{
      Layout = "_LayoutSaler";
+     var id=ViewBag.proId;
 }
 <div class="row">
   <div class="col-xl-12 col-lg-12 col-md-12 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-12">
               <div class="card card-plain">
                 <div class="card-header">
-                  <h4 class="font-weight-bolder">Send Pay Offer</h4>
-                  <p class="mb-0">Enter Your Estamited Price & Note </p>
+                  <h4 class="font-weight-bolder">Upload Your Product Image</h4>
+                  <p class="mb-0"></p>
                 </div>
                 <div class="card-body">
-                  <form  asp-action="SendPayOffer" method="post">
-                      <input type="number" name="productId" value="" hidden readonly />
-                    <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Price</label>
-                      <input type="number" name="price" class="form-control">
+                  <form  asp-action="InsertMedia" method="post" enctype="multipart/form-data">
+                    <input type="number" name="product" value="@id" hidden readonly />
+                    <div class="col-6 input-group input-group-outline mb-3">
+                 
+                      <input type="file" name="image" class="form-control">
                     </div>
-                    <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Offer Title</label>
-                      <input type="text" name="title" class="form-control">
-                    </div>
-                    <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Note</label>
-                      <input type="text" name="note" class="form-control">
+                     <div class="col-6 input-group input-group-outline mb-3">
+                      <label class="form-label"></label>
+                      <select class="form-control" name="mediaType">
+                          <option value="1">Select Media Type</option>
+                          @foreach (var item in Model)
+                         {
+                                <option value="@item.MediaTypeId">@item.Name</option>
+                         }
+                       
+                     </select>
                     </div>
 
+                    <div class="col-6 input-group input-group-outline mb-3">
+                      <label class="form-label"></label>
+                      <select class="form-control" name="ismain">
+                          <option value="false">is Main Image</option>
+                          <option value="true">Yes</option>
+                          <option value="false">No</option>
+                     </select>
+                    </div>
+
+
+
                     <div class="text-center">
-                      <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Send Offer</button>
+                      <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Save Media</button>
+                    </div>
+                     </form>
+
+                    <form asp-action="InsertLoactions" method="get">
+                     <div class="text-center">
+                      <button type="submit"  class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Move To Add Location</button>
                     </div>
                   </form>
                 </div>
