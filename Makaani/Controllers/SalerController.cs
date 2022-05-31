@@ -63,16 +63,25 @@ namespace Makaani.Controllers
                           };
             var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("UserId")).ToList();
             var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
-            var myFollower = from f in follower
-                             join u in user on f.FirstUserId equals u.UserId
-                             select new Followers
-                             {
-                                 Follower = f,
-                                 User = u
-                             };
-            ViewBag.Follower = myFollower;
-            var pro = profile.ElementAt(0);
-            return View(pro);
+            if(follower.Count>0 && user.Count > 0)
+            {
+                var myFollower = from f in follower
+                                 join u in user on f.FirstUserId equals u.UserId
+                                 select new Followers
+                                 {
+                                     Follower = f,
+                                     User = u
+                                 };
+                ViewBag.Follower = myFollower;
+                var pro = profile.ElementAt(0);
+                return View(pro);
+            }
+            else {
+                ViewBag.Follower = new List<Follower>();    
+                var pro = profile.ElementAt(0);
+                return View(pro);
+            }
+          
         }
 
         public IActionResult MyProducts()

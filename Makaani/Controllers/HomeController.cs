@@ -275,6 +275,7 @@ m in media on p.ProductId equals m.ProductId
 
         public IActionResult Error()
         {
+            ViewBag.mas = "Login Failed Eaither Email or Password is Wrong";
             return View();
         }
 
@@ -293,7 +294,7 @@ m in media on p.ProductId equals m.ProductId
             
             if (accountUser.Contains("@"))
             {
-                var login = _context.Login.Where(x => x.Email == accountUser && x.Password == Password).Single();
+                var login = _context.Login.Where(x => x.Email == accountUser && x.Password == Password).SingleOrDefault();
                 if (login == null)
                 {
                     return Unauthorized();
@@ -311,10 +312,10 @@ m in media on p.ProductId equals m.ProductId
             }
             else
             {
-                var login = _context.Login.Where(x => x.Phone == accountUser && x.Password == Password).Single();
+                var login = _context.Login.Where(x => x.Phone == accountUser && x.Password == Password).SingleOrDefault();
                 if (login == null)
                 {
-                    return Unauthorized();
+                    return RedirectToAction("");
                 }
                 else
                 {
