@@ -40,6 +40,7 @@ namespace Makaani.Controllers
 
             var EsatateCategory=_context.Category.ToList();
             var Place=_context.Provinces.ToList();
+            var department=_context.Finishes.ToList();
 
             var media=_context.Media.Where(x=>x.IsMainImage==true && x.MediaTypeId==1).ToList();
             var finishes=_context.Finishes.ToList();
@@ -67,10 +68,10 @@ namespace Makaani.Controllers
                                               Location=l
 
                                           };
-            return View(Tuple.Create(estateCardJoinData, EsatateCategory, Place));
+            return View(Tuple.Create(estateCardJoinData, EsatateCategory, Place,department));
         }
         [HttpPost]
-        public IActionResult SearchForEstate(string keyWord,int categotyId,int placeId)
+        public IActionResult SearchForEstate(string keyWord,int budget, int categotyId,int placeId,int finishiesId)
         {
             var EsatateCategory = _context.Category.ToList();
             if (categotyId != 0)
@@ -88,13 +89,18 @@ namespace Makaani.Controllers
             }
             var ads = _context.Ads.ToList();
 
-            if(keyWord!=null && keyWord != "")
+            if(keyWord!=null && keyWord != "" && budget !=0)
             {
-                ads = _context.Ads.Where(x=>x.Title.Contains(keyWord)).ToList();
+                ads = _context.Ads.Where(x=>x.Title.Contains(keyWord) && x.Price<=budget).ToList();
+            }
+            var finishes = _context.Finishes.ToList();
+            if (finishiesId != 0)
+            {
+                finishes=_context.Finishes.Where(x=>x.FinishesId==finishiesId).ToList();
             }
 
             var media = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
-            var finishes = _context.Finishes.ToList();
+          
             var product = _context.Product.ToList();
             
             var depar = _context.Department.ToList();
@@ -121,7 +127,9 @@ namespace Makaani.Controllers
                                          Location = l
 
                                      };
-            return View("Estate",Tuple.Create(estateCardJoinData, _context.Category.ToList(), _context.Provinces.ToList()));
+            var department = _context.Finishes.ToList();
+
+            return View("Estate",Tuple.Create(estateCardJoinData, _context.Category.ToList(), _context.Provinces.ToList(), department));
         }
 
         public IActionResult AboutUs()
@@ -133,6 +141,7 @@ namespace Makaani.Controllers
         {
             var EsatateCategory = _context.Category.ToList();
             var Place = _context.Provinces.ToList();
+            var department = _context.Finishes.ToList();
 
             var media = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
             var finishes = _context.Finishes.ToList();
@@ -162,7 +171,7 @@ m in media on p.ProductId equals m.ProductId
                                          Location = l
 
                                      };
-            return View(Tuple.Create(estateCardJoinData, EsatateCategory, Place));
+            return View(Tuple.Create(estateCardJoinData, EsatateCategory, Place, department));
 
         }
 
