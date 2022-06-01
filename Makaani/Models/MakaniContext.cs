@@ -34,6 +34,7 @@ namespace Makaani.Models
         public virtual DbSet<MediaType> MediaType { get; set; }
         public virtual DbSet<Offer> Offer { get; set; }
         public virtual DbSet<PayingOffer> PayingOffer { get; set; }
+        public virtual DbSet<Payment> Payment { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Promotion> Promotion { get; set; }
         public virtual DbSet<Provinces> Provinces { get; set; }
@@ -375,6 +376,21 @@ namespace Makaani.Models
                     .WithMany(p => p.PayingOffer)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_PayingOffer_User");
+            });
+
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.Property(e => e.PaymentId)
+                    .HasColumnName("PaymentID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CardNumber)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Product>(entity =>

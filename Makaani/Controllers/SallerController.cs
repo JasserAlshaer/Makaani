@@ -17,6 +17,8 @@ namespace Makaani.Controllers
 
         public static int currentProjectId;
         public static int currentLocationId;
+        
+
         public SallerController(MakaniContext context, IWebHostEnvironment environment)
         {
             _context = context;
@@ -953,7 +955,48 @@ namespace Makaani.Controllers
 
             return View("Index");
         }
+        public IActionResult UpgradeAccount()
+        {
+            var login = _context.Login.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).SingleOrDefault();
+            if(login == null)
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                if (login.RoleId == 1)
+                {
+                     return View();
+                }
+                else if(login.RoleId==2)
+                {
+                    return RedirectToAction("Profile");
+                }
+            }
+            return Unauthorized();
+        }
+        [HttpPost]
+        public IActionResult UpgradeAccount(string card,string code)
+        {
+            var visa=_context.Payment.Where(x=>x.CardNumber == card && x.Code==code
+             && x.Balance >= 25 ).SingleOrDefault();
+            if (visa != null)
+            {
+                visa.Balance -= 25;
 
+                var login = _context.Login.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).SingleOrDefault();
+                if (login != null)
+                {
+                    login.RoleId = 2;
+                }
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+            return RedirectToAction("Profile");
+        }
         public IActionResult Logout()
         {
             if (HttpContext.Session.GetInt32("UserId") != 0)

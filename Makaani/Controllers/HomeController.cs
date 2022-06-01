@@ -82,13 +82,13 @@ namespace Makaani.Controllers
 
             if (HttpContext.Session.GetInt32("UserId") == 0)
             {
-                UserSearch userSearch = new UserSearch();
-                userSearch.SearchTitle = keyWord;
-                userSearch.CategoryId = categotyId;
-                userSearch.PlaceId = placeId;
-                userSearch.UserId = 6;
-                _context.Add(userSearch);
-                _context.SaveChanges();
+                //UserSearch userSearch = new UserSearch();
+                //userSearch.SearchTitle = keyWord;
+                //userSearch.CategoryId = categotyId;
+                //userSearch.PlaceId = placeId;
+                //userSearch.UserId = 6;
+                //_context.Add(userSearch);
+                //_context.SaveChanges();
             }
             else
             {
@@ -222,23 +222,77 @@ namespace Makaani.Controllers
 
 
         public IActionResult SingleEstate(int id)
-        
-        
         {
 
-            if (HttpContext.Session.GetInt32("UserId") == 0)
+
+
+            int productId = 0;
+            var productObj = _context.Ads.Where(x => x.AdsId == id).SingleOrDefault();
+            if(productObj != null)
             {
-                LastViewAds lastViewAds = new LastViewAds();
-                lastViewAds.LastViewAt = DateTime.Now;
-                lastViewAds.AdsId = id;
-                lastViewAds.UserId = 6;
-                _context.Add(lastViewAds);
-                _context.SaveChanges();
+                productId =(int) productObj.ProductId;
             }
-            else
+            var media = _context.Media.Where(x => x.ProductId == productId).ToList();
+
+            var category = _context.Category.ToList();
+            var department = _context.Department.ToList();
+            var Place = _context.Provinces.ToList();
+            var location = _context.Location.ToList();
+            var users = _context.User.ToList();
+            //var promoution = _context.Promotion.ToList();
+            //var offer = _context.Offer.ToList();
+            var finishes = _context.Finishes.ToList();
+            var feature = _context.Feature.Where(x => x.ProductId == productId).ToList();
+            var product = _context.Product.Where(x => x.ProductId == productId).ToList();
+            var ads = _context.Ads.Where(x => x.AdsId == id).ToList();
+
+
+
+
+            var estateFullAdsInfo = from a in ads
+                                    join
+                      u in users on a.UserId equals u.UserId
+                                    join
+                                    l in location on a.LocationId equals l.LoactionId
+                                    join
+                                    d in department on a.DepartmentId equals d.DepartmentId
+                                    join
+                                    c in category on a.CategoryId equals c.CategoryId
+                                    join
+                                    p in product on a.ProductId equals p.ProductId
+                                    join
+                                    f in finishes on p.FinishesId equals f.FinishesId
+                                    join
+                                    feat in feature on p.ProductId equals feat.ProductId
+                                    join
+                                    m in media on a.ProductId equals m.ProductId
+
+
+
+
+
+                                    select new SingleAds
+                                    {
+                                        Ads = a,
+                                        User = u,
+                                        Location = l,
+                                        Department = d,
+                                        Category = c,
+                                        Product = p,
+                                        Feature = feat,
+                                        Finishes = f,
+                                        Media = m
+
+                                    };
+
+            ViewBag.adsViews = _context.LastViewAds.Where(x => x.AdsId == id).Count();
+            return View(estateFullAdsInfo);
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
-                var record=_context.LastViewAds.Where(x=>x.UserId == HttpContext.Session.GetInt32("UserId")
-                && x.AdsId==id).SingleOrDefault();
+
+
+                var record = _context.LastViewAds.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")
+                  && x.AdsId == id).SingleOrDefault();
                 if (record == null)
                 {
                     LastViewAds lastViewAds = new LastViewAds();
@@ -256,64 +310,7 @@ namespace Makaani.Controllers
 
                 }
             }
-
-            int productId =(int) _context.Ads.Where(x => x.AdsId == id).Single().ProductId;
-            var media = _context.Media.Where(x=> x.ProductId== productId).ToList();
-          
-            var category = _context.Category.ToList();
-            var department = _context.Department.ToList();
-            var Place = _context.Provinces.ToList();
-            var location = _context.Location.ToList();
-            var users = _context.User.ToList();
-            //var promoution = _context.Promotion.ToList();
-            //var offer = _context.Offer.ToList();
-            var finishes = _context.Finishes.ToList();
-            var feature=_context.Feature.Where(x=>x.ProductId==productId).ToList();
-            var product = _context.Product.Where(x=>x.ProductId == productId).ToList();
-            var ads = _context.Ads.Where(x=>x.AdsId==id).ToList();
-
-
-            
-
-            var estateFullAdsInfo = from a in ads join
-                                    u in users on a.UserId equals u.UserId
-                                    join
-                                    l in location on a.LocationId equals l.LoactionId
-                                    join
-                                    d in department on a.DepartmentId equals d.DepartmentId
-                                    join
-                                    c in category on a.CategoryId equals c.CategoryId
-                                    join 
-                                    p in product on a.ProductId equals p.ProductId
-                                    join 
-                                    f in finishes on p.FinishesId equals f.FinishesId
-                                    join 
-                                    feat in feature on p.ProductId equals feat.ProductId
-                                    join 
-                                    m in media on a.ProductId equals m.ProductId
-
-
-
-
-
-                                    select new SingleAds
-                                    {
-                                        Ads = a,
-                                        User = u,
-                                        Location = l,
-                                        Department = d,
-                                        Category = c,
-                                        Product = p,
-                                        Feature=feat,
-                                        Finishes=f,
-                                        Media=m
-
-                                    };
-
-            ViewBag.adsViews = _context.LastViewAds.Where(x => x.AdsId == id).Count();
-            return View(estateFullAdsInfo);
         }
-
         public IActionResult Categorys()
         {
             return View(_context.Category.ToList());
@@ -465,13 +462,13 @@ namespace Makaani.Controllers
         {
             if (HttpContext.Session.GetInt32("UserId") == 0)
             {
-                UserSearch userSearch   =new UserSearch();
-                userSearch.SearchTitle = keyWord;
-                userSearch.CategoryId = categotyId;
-                userSearch.PlaceId = placeId;
-                userSearch.UserId = 6;
-                _context.Add(userSearch);
-                _context.SaveChanges();
+                //UserSearch userSearch   =new UserSearch();
+                //userSearch.SearchTitle = keyWord;
+                //userSearch.CategoryId = categotyId;
+                //userSearch.PlaceId = placeId;
+                //userSearch.UserId = 6;
+                //_context.Add(userSearch);
+                //_context.SaveChanges();
             }
             else
             {
