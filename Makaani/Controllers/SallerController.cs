@@ -363,12 +363,23 @@ namespace Makaani.Controllers
         }
         public IActionResult FollowNewUser(int seondUserId)
         {
-            Follower follower = new Follower();
-            follower.FirstUserId=HttpContext.Session.GetInt32("UserId");
-            follower.SecondUserId = seondUserId;
-            _context.Add(follower);
-            _context.SaveChanges();
-            return RedirectToAction("Follower");
+            var rec = _context.Follower.Where(x => x.FirstUserId == HttpContext.Session.GetInt32("UserId")
+               && x.SecondUserId == seondUserId).SingleOrDefault();
+            if(rec == null)
+            {
+                Follower follower = new Follower();
+                follower.FirstUserId = HttpContext.Session.GetInt32("UserId");
+                follower.SecondUserId = seondUserId;
+                _context.Add(follower);
+                _context.SaveChanges();
+                return RedirectToAction("Follower");
+            }
+            else
+            {
+                ViewBag.mas = "Your'e Not Login OR You're Follwe This Saler Already";
+                return View("Error");
+            }
+           
         }
 
         public IActionResult UnFollowUser(int follwerId)

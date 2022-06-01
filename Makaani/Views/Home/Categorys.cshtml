@@ -13,7 +13,7 @@
                 @foreach (var item in Model)
                {
                     <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
-                        <a class="cat-item d-block bg-light text-center rounded p-3" href="">
+                        <a class="cat-item d-block bg-light text-center rounded p-3" asp-action="SearchForEstateFromDashboard" asp-route-categotyId="@item.CategoryId">
                             <div class="rounded p-4">
                                 <div class="icon mb-3">
                                     <img class="img-fluid" src="~/MakaniAssets/img/icon-luxury.png" alt="Icon">

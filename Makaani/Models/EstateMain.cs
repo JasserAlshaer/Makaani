@@ -11,5 +11,9 @@
         public Department Department { get; set; }  
 
         public Location Location { get; set; }
+
+        public Category Category { get; set; }
+
+        public  Provinces Provinces { get; set; }
     }
 }

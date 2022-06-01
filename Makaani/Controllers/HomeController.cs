@@ -50,24 +50,30 @@ namespace Makaani.Controllers
             var owners = _context.User.ToList();
             var locations = _context.Location.ToList();
 
-            var estateCardJoinData=     from p in product  join
-                                          f in finishes on p.FinishesId equals f.FinishesId join
-                                          m in media on p.ProductId equals m.ProductId
-                                          join a in ads on p.ProductId equals a.ProductId
-                                          join o in owners on a.UserId equals o.UserId
-                                          join d in depar on a.DepartmentId equals d.DepartmentId
-                                          join l in locations on a.LocationId equals l.LoactionId
-                                           select new EstateMain
-                                          {
-                                              Product = p,
-                                              Finishes=f,
-                                              Media=m,
-                                              Ads=a,
-                                              User=o,
-                                              Department=d,
-                                              Location=l
+            var estateCardJoinData = from p in product
+                                     join
+                                     f in finishes on p.FinishesId equals f.FinishesId
+                                     join
+                                     m in media on p.ProductId equals m.ProductId
+                                     join a in ads on p.ProductId equals a.ProductId
+                                     join o in owners on a.UserId equals o.UserId
+                                     join d in depar on a.DepartmentId equals d.DepartmentId
+                                     join l in locations on a.LocationId equals l.LoactionId
+                                     join prov in Place on l.ProvincesId equals prov.ProvincesId
+                                     join c in EsatateCategory on a.CategoryId equals c.CategoryId
+                                     select new EstateMain
+                                     {
+                                         Product = p,
+                                         Finishes = f,
+                                         Media = m,
+                                         Ads = a,
+                                         User = o,
+                                         Department = d,
+                                         Location = l,
+                                         Category = c,
+                                         Provinces = prov,
 
-                                          };
+                                     };
             return View(Tuple.Create(estateCardJoinData, EsatateCategory, Place,department));
         }
         [HttpPost]
@@ -78,44 +84,54 @@ namespace Makaani.Controllers
             {
                 EsatateCategory = _context.Category.Where(x => x.CategoryId == categotyId).ToList();
             }
-            
 
-          
+
+
             var Place = _context.Provinces.ToList();
-            if(placeId != 0)
+            if (placeId != 0)
             {
-                Place = _context.Provinces.Where(x=>x.ProvincesId==placeId).ToList();
+                Place = _context.Provinces.Where(x => x.ProvincesId == placeId).ToList();
 
             }
             var ads = _context.Ads.ToList();
 
-            if(keyWord!=null && keyWord != "" && budget !=0)
+            if (keyWord != null && budget != 0)
             {
-                ads = _context.Ads.Where(x=>x.Title.Contains(keyWord) && x.Price<=budget).ToList();
+                ads = _context.Ads.Where(x => x.Title.Contains(keyWord) || x.Price <= budget).ToList();
+            }
+            else if (keyWord == null && budget != 0)
+            {
+                ads = _context.Ads.Where(x => x.Price <= budget).ToList();
+            }
+            else if (keyWord != null && budget == 0)
+            {
+                ads = _context.Ads.Where(x => x.Title.Contains(keyWord)).ToList();
             }
             var finishes = _context.Finishes.ToList();
             if (finishiesId != 0)
             {
-                finishes=_context.Finishes.Where(x=>x.FinishesId==finishiesId).ToList();
+                finishes = _context.Finishes.Where(x => x.FinishesId == finishiesId).ToList();
             }
 
             var media = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
-          
+
             var product = _context.Product.ToList();
-            
+
             var depar = _context.Department.ToList();
             var owners = _context.User.ToList();
             var locations = _context.Location.ToList();
 
             var estateCardJoinData = from p in product
                                      join
-                    f in finishes on p.FinishesId equals f.FinishesId
+                                     f in finishes on p.FinishesId equals f.FinishesId
                                      join
                                      m in media on p.ProductId equals m.ProductId
                                      join a in ads on p.ProductId equals a.ProductId
                                      join o in owners on a.UserId equals o.UserId
                                      join d in depar on a.DepartmentId equals d.DepartmentId
                                      join l in locations on a.LocationId equals l.LoactionId
+                                     join prov in Place on l.ProvincesId equals prov.ProvincesId
+                                     join c in EsatateCategory on a.CategoryId equals c.CategoryId
                                      select new EstateMain
                                      {
                                          Product = p,
@@ -124,12 +140,14 @@ namespace Makaani.Controllers
                                          Ads = a,
                                          User = o,
                                          Department = d,
-                                         Location = l
+                                         Location = l,
+                                         Category = c,
+                                         Provinces = prov,
 
                                      };
             var department = _context.Finishes.ToList();
 
-            return View("Estate",Tuple.Create(estateCardJoinData, _context.Category.ToList(), _context.Provinces.ToList(), department));
+            return View("Estate", Tuple.Create(estateCardJoinData, _context.Category.ToList(), _context.Provinces.ToList(), department));
         }
 
         public IActionResult AboutUs()
@@ -153,13 +171,15 @@ namespace Makaani.Controllers
 
             var estateCardJoinData = from p in product
                                      join
-                    f in finishes on p.FinishesId equals f.FinishesId
+                                     f in finishes on p.FinishesId equals f.FinishesId
                                      join
-m in media on p.ProductId equals m.ProductId
+                                     m in media on p.ProductId equals m.ProductId
                                      join a in ads on p.ProductId equals a.ProductId
                                      join o in owners on a.UserId equals o.UserId
                                      join d in depar on a.DepartmentId equals d.DepartmentId
                                      join l in locations on a.LocationId equals l.LoactionId
+                                     join prov in Place on l.ProvincesId equals prov.ProvincesId
+                                     join c in EsatateCategory on a.CategoryId equals c.CategoryId
                                      select new EstateMain
                                      {
                                          Product = p,
@@ -168,10 +188,12 @@ m in media on p.ProductId equals m.ProductId
                                          Ads = a,
                                          User = o,
                                          Department = d,
-                                         Location = l
+                                         Location = l,
+                                         Category = c,
+                                         Provinces = prov,
 
                                      };
-            return View(Tuple.Create(estateCardJoinData, EsatateCategory, Place, department));
+            return View(Tuple.Create(estateCardJoinData, _context.Category.ToList(), _context.Provinces.ToList(), department));
 
         }
 
@@ -257,13 +279,13 @@ m in media on p.ProductId equals m.ProductId
                         sum++;
                     }
                 }
-                if (sum > 10)
+                if (sum >= 1)
                 {
                     topSallers.Add(u);
                 }
             }
 
-            return View(topSallers );
+            return View("TopSalers",topSallers );
         }
 
         public IActionResult Testimonials()
@@ -369,7 +391,7 @@ m in media on p.ProductId equals m.ProductId
         }
 
 
-        public IActionResult SearchForEstateFromDashboard(string keyWord, int categotyId, int placeId)
+        public IActionResult SearchForEstateFromDashboard(string keyWord, int budget, int categotyId, int placeId, int finishiesId)
         {
             var EsatateCategory = _context.Category.ToList();
             if (categotyId != 0)
@@ -387,13 +409,26 @@ m in media on p.ProductId equals m.ProductId
             }
             var ads = _context.Ads.ToList();
 
-            if (keyWord != null && keyWord != "")
+            if (keyWord != null && budget != 0)
+            {
+                ads = _context.Ads.Where(x => x.Title.Contains(keyWord) || x.Price <= budget).ToList();
+            }
+            else if (keyWord == null && budget != 0)
+            {
+                ads = _context.Ads.Where(x => x.Price <= budget).ToList();
+            }
+            else if (keyWord != null && budget == 0)
             {
                 ads = _context.Ads.Where(x => x.Title.Contains(keyWord)).ToList();
             }
+            var finishes = _context.Finishes.ToList();
+            if (finishiesId != 0)
+            {
+                finishes = _context.Finishes.Where(x => x.FinishesId == finishiesId).ToList();
+            }
 
             var media = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
-            var finishes = _context.Finishes.ToList();
+
             var product = _context.Product.ToList();
 
             var depar = _context.Department.ToList();
@@ -402,13 +437,15 @@ m in media on p.ProductId equals m.ProductId
 
             var estateCardJoinData = from p in product
                                      join
-                    f in finishes on p.FinishesId equals f.FinishesId
+                                     f in finishes on p.FinishesId equals f.FinishesId
                                      join
                                      m in media on p.ProductId equals m.ProductId
                                      join a in ads on p.ProductId equals a.ProductId
                                      join o in owners on a.UserId equals o.UserId
                                      join d in depar on a.DepartmentId equals d.DepartmentId
                                      join l in locations on a.LocationId equals l.LoactionId
+                                     join prov in Place on l.ProvincesId equals prov.ProvincesId
+                                     join c in EsatateCategory on a.CategoryId equals c.CategoryId
                                      select new EstateMain
                                      {
                                          Product = p,
@@ -417,11 +454,14 @@ m in media on p.ProductId equals m.ProductId
                                          Ads = a,
                                          User = o,
                                          Department = d,
-                                         Location = l
+                                         Location = l,
+                                         Category=c,
+                                         Provinces = prov,
 
                                      };
-            return View("Estate", Tuple.Create(estateCardJoinData, _context.Category.ToList(), _context.Provinces.ToList()));
-        }
+            var department = _context.Finishes.ToList();
 
+            return View("Estate", Tuple.Create(estateCardJoinData, _context.Category.ToList(), _context.Provinces.ToList(), department));
+        }
     }
 }
