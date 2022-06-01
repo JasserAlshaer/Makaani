@@ -75,8 +75,33 @@ a-scene {
 						  </div>
 						</div>
 
+
 						<br /> 
-								<br />
+						<br />
+										<div class="row">
+					<button class="col-3  add-to-cart btn btn-default" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="margin-right:25px; margin-left:45px;" >
+								
+						Open Video
+			       </button>
+
+								
+                <button class="col-3  add-to-cart btn btn-default" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right:25px;">		
+				     Open 360 Image
+				</button>
+			
+							<button class=" col-3 like btn btn-default" type="button" style="margin-right:25px;" >
+								<a asp-controller="Saller" asp-action="InsertToLoveList"  asp-route-id="@Model.Item1.ElementAt(0).Ads.ProductId">
+									<span class="fa fa-heart" style="color:white;"></span>
+								</a>
+							
+						   </button>
+						   
+						   	<button class="offset-2 col-8 offset-2 add-to-cart btn btn-default" type="button" style="margin-top:12px;">
+								<a asp-controller="Saller" asp-action="SendPayOffer"  asp-route-adsId="@Model.Item1.ElementAt(0).Ads.AdsId" style="color:white;">
+									Send Pay Offer
+								</a>
+								</button>
+				</div>
 						
 
 					</div>
@@ -115,30 +140,7 @@ a-scene {
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<button class="col-3 offset-1 add-to-cart btn btn-default" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" >
-								
-						Open Video
-			       </button>
 
-								
-                <button class="offset-1 col-3  add-to-cart btn btn-default" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" >		
-				     Open 360 Image
-				</button>
-			
-							<button class="offset-1 col-3 like btn btn-default" type="button" >
-								<a asp-controller="Saller" asp-action="InsertToLoveList"  asp-route-id="@Model.Item1.ElementAt(0).Ads.ProductId">
-									<span class="fa fa-heart" style="color:white;"></span>
-								</a>
-							
-						   </button>
-						   
-						   	<button class="offset-2 col-8 offset-2 add-to-cart btn btn-default" type="button" style="margin-top:40px;">
-								<a asp-controller="Saller" asp-action="SendPayOffer"  asp-route-adsId="@Model.Item1.ElementAt(0).Ads.AdsId" style="color:white;">
-									Send Pay Offer
-								</a>
-								</button>
-				</div>
 			</div>
 		</div>
 	</div>
