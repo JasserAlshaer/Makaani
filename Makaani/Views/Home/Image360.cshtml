@@ -1,0 +1,43 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+   
+}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Title of the document</title>
+<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script> 
+<style>
+a-scene {
+  height: 300px;
+  width: 600px;
+}
+#myEmbeddedScene {
+  height: 300px;
+  width: 600px;
+}
+</style>
+</head>
+
+<body>
+    @*<a-scene>
+      <a-sky src="https://images.unsplash.com/photo-1596263576925-d90d63691097?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1622&q=80"></a-sky> 
+    </a-scene>.*@
+    <div id="myEmbeddedScene">
+  <a-scene embedded>
+@*    <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+    <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+    <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+    <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+    <a-camera></a-camera>
+    <a-sky color="#aa00ff"></a-sky>*@
+      <a-sky src="https://images.unsplash.com/photo-1596263576925-d90d63691097?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1622&q=80"></a-sky> 
+  </a-scene>
+</div>
+
+
+</body>
+
+</html>

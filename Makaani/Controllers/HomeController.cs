@@ -232,8 +232,8 @@ namespace Makaani.Controllers
             {
                 productId =(int) productObj.ProductId;
             }
-            var media = _context.Media.Where(x => x.ProductId == productId).ToList();
-
+            var media = _context.Media.Where(x => x.ProductId == productId && x.IsMainImage==true).ToList();
+            
             var category = _context.Category.ToList();
             var department = _context.Department.ToList();
             var Place = _context.Provinces.ToList();
@@ -286,7 +286,7 @@ namespace Makaani.Controllers
                                     };
 
             ViewBag.adsViews = _context.LastViewAds.Where(x => x.AdsId == id).Count();
-            return View(estateFullAdsInfo);
+           
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
 
@@ -310,7 +310,23 @@ namespace Makaani.Controllers
 
                 }
             }
+            return View(Tuple.Create(estateFullAdsInfo,_context.Media.ToList()));
         }
+        //public IActionResult Image360(string imagePath="")
+        //{
+        //    if(imagePath == "")
+        //    {
+        //        return RedirectToAction("Index");
+        //    }
+        //    ViewBag.imagePath = imagePath;  
+        //    return View();
+        //}
+
+        //public IActionResult ViedoVR(string videoPath)
+        //{
+        //    ViewBag.videoPath = videoPath;
+        //    return View();
+        //}
         public IActionResult Categorys()
         {
             return View(_context.Category.ToList());
