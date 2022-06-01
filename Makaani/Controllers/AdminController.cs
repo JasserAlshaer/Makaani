@@ -15,101 +15,151 @@ namespace Makaani.Controllers
         }
         public IActionResult Index()
         {
-            ViewBag.Ads = _context.Ads.Count();
-            ViewBag.Customer = _context.Login.Where(x=>x.RoleId==1).Count();
-            ViewBag.Testimonoials = _context.Testimonails.Count();
-            ViewBag.Saller = _context.Login.Where(x => x.RoleId == 2).Count();
-            ViewBag.Searches = _context.UserSearch.ToList(); 
-            ViewBag.Last= _context.LastViewAds.Count();
-            ViewBag.PayOffer=_context.PayingOffer.Count();
-            return View();
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                ViewBag.Ads = _context.Ads.Count();
+                ViewBag.Customer = _context.Login.Where(x => x.RoleId == 1).Count();
+                ViewBag.Testimonoials = _context.Testimonails.Count();
+                ViewBag.Saller = _context.Login.Where(x => x.RoleId == 2).Count();
+                ViewBag.Searches = _context.UserSearch.ToList();
+                ViewBag.Last = _context.LastViewAds.Count();
+                ViewBag.PayOffer = _context.PayingOffer.Count();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         public IActionResult Users()
         {
-            return View(_context.User.OrderByDescending(x=>x.JoiningDate).ToList());
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                return View(_context.User.OrderByDescending(x => x.JoiningDate).ToList());
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         public IActionResult Testimonials()
         {
-            var users = _context.User.ToList();
-            var testiomonails = _context.Testimonails.ToList();
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                var users = _context.User.ToList();
+                var testiomonails = _context.Testimonails.ToList();
 
-            var UserFeeds = from u in users
-                            join t in testiomonails
-            on u.UserId equals t.UserId
-                            select new Feed
-                            {
-                                User = u,
-                                Testimonails = t
-                            };
-            return View(UserFeeds);
+                var UserFeeds = from u in users
+                                join t in testiomonails
+                on u.UserId equals t.UserId
+                                select new Feed
+                                {
+                                    User = u,
+                                    Testimonails = t
+                                };
+                return View(UserFeeds);
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         public IActionResult RejectTesitominals(int id)
         {
-            var test = _context.Testimonails.Where(x => x.TestimonailsId == id).SingleOrDefault();
-            if (test == null)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                return NotFound();
+                var test = _context.Testimonails.Where(x => x.TestimonailsId == id).SingleOrDefault();
+                if (test == null)
+                {
+                    return NotFound();
+                }
+                test.IsAccepted = false;
+                _context.Update(test);
+                _context.SaveChanges();
+                return RedirectToAction("Testimonials");
+
             }
-            test.IsAccepted = false;
-            _context.Update(test);
-            _context.SaveChanges();
-            return RedirectToAction("Testimonials");
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
 
         public IActionResult AcceptTesitominals(int id)
         {
-            var test=_context.Testimonails.Where(x=>x.TestimonailsId == id).SingleOrDefault();
-            if (test == null)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                return NotFound();
+                var test = _context.Testimonails.Where(x => x.TestimonailsId == id).SingleOrDefault();
+                if (test == null)
+                {
+                    return NotFound();
+                }
+                test.IsAccepted = true;
+                _context.Update(test);
+                _context.SaveChanges();
+
+                return RedirectToAction("Testimonials");
             }
-            test.IsAccepted = true;
-            _context.Update(test);
-            _context.SaveChanges();
-            
-            return RedirectToAction("Testimonials");
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         public IActionResult Products()
         {
-            var EsatateCategory = _context.Category.ToList();
-            var Place = _context.Provinces.ToList();
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                var EsatateCategory = _context.Category.ToList();
+                var Place = _context.Provinces.ToList();
 
-            var media = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
-            var finishes = _context.Finishes.ToList();
-            var product = _context.Product.ToList();
-            var ads = _context.Ads.ToList();
-            var depar = _context.Department.ToList();
-            var owners = _context.User.ToList();
-            var locations = _context.Location.ToList();
+                var media = _context.Media.Where(x => x.IsMainImage == true && x.MediaTypeId == 1).ToList();
+                var finishes = _context.Finishes.ToList();
+                var product = _context.Product.ToList();
+                var ads = _context.Ads.ToList();
+                var depar = _context.Department.ToList();
+                var owners = _context.User.ToList();
+                var locations = _context.Location.ToList();
 
-            var estateCardJoinData = from p in product
-                                     join
-                                     f in finishes on p.FinishesId equals f.FinishesId
-                                     join
-                                      m in media on p.ProductId equals m.ProductId
-                                     join a in ads on p.ProductId equals a.ProductId
-                                     join o in owners on a.UserId equals o.UserId
-                                     join d in depar on a.DepartmentId equals d.DepartmentId
-                                     join l in locations on a.LocationId equals l.LoactionId
-                                     select new EstateMain
-                                     {
-                                         Product = p,
-                                         Finishes = f,
-                                         Media = m,
-                                         Ads = a,
-                                         User = o,
-                                         Department = d,
-                                         Location = l
+                var estateCardJoinData = from p in product
+                                         join
+                                         f in finishes on p.FinishesId equals f.FinishesId
+                                         join
+                                          m in media on p.ProductId equals m.ProductId
+                                         join a in ads on p.ProductId equals a.ProductId
+                                         join o in owners on a.UserId equals o.UserId
+                                         join d in depar on a.DepartmentId equals d.DepartmentId
+                                         join l in locations on a.LocationId equals l.LoactionId
+                                         select new EstateMain
+                                         {
+                                             Product = p,
+                                             Finishes = f,
+                                             Media = m,
+                                             Ads = a,
+                                             User = o,
+                                             Department = d,
+                                             Location = l
 
-                                     };
-            return View(estateCardJoinData);
+                                         };
+                return View(estateCardJoinData);
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
 
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                HttpContext.Session.Clear();
 
-            return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         //#83BD75
     }

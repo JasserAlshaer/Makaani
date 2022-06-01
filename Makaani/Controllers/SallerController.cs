@@ -25,7 +25,12 @@ namespace Makaani.Controllers
         }
         public IActionResult Index()
         {
+
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                
             
+
             ViewBag.Ads = _context.Ads.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).Count();
             ViewBag.Offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).Count();
             ViewBag.Follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("UserId")).Count();
@@ -45,47 +50,66 @@ namespace Makaani.Controllers
                                   };
 
             return View(providedOffers);
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         public IActionResult Profile()
         {
-            var users =_context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
-            var login =_context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
-            var role = _context.Role.ToList();
-            var profile = from u in users
-                          join l in login
-                          on u.UserId equals l.UserId
-                          join r in role on l.RoleId equals r.RoleId
-                          select new ProfileU
-                          {
-                              User = u,
-                              Login =l,
-                              Role=r
-                          };
-            var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("UserId")).ToList();
-            var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
-            if(follower.Count>0 && user.Count > 0)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                var myFollower = from f in follower
-                                 join u in user on f.FirstUserId equals u.UserId
-                                 select new Followers
-                                 {
-                                     Follower = f,
-                                     User = u
-                                 };
-                ViewBag.Follower = myFollower;
-                var pro = profile.ElementAt(0);
-                return View(pro);
+
+                var users = _context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                var login = _context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                var role = _context.Role.ToList();
+                var profile = from u in users
+                              join l in login
+                              on u.UserId equals l.UserId
+                              join r in role on l.RoleId equals r.RoleId
+                              select new ProfileU
+                              {
+                                  User = u,
+                                  Login = l,
+                                  Role = r
+                              };
+                var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
+                if (follower.Count > 0 && user.Count > 0)
+                {
+                    var myFollower = from f in follower
+                                     join u in user on f.FirstUserId equals u.UserId
+                                     select new Followers
+                                     {
+                                         Follower = f,
+                                         User = u
+                                     };
+                    ViewBag.Follower = myFollower;
+                    var pro = profile.ElementAt(0);
+                    return View(pro);
+                }
+                else
+                {
+                    ViewBag.Follower = new List<Follower>();
+                    var pro = profile.ElementAt(0);
+                    return View(pro);
+                }
             }
-            else {
-                ViewBag.Follower = new List<Follower>();    
-                var pro = profile.ElementAt(0);
-                return View(pro);
+
+            else
+            {
+                return RedirectToAction("Home", "Login");
             }
-          
         }
 
         public IActionResult MyProducts()
         {
+
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+               
+           
             var EsatateCategory = _context.Category.ToList();
             var Place = _context.Provinces.ToList();
 
@@ -118,13 +142,26 @@ namespace Makaani.Controllers
 
                                      };
             return View(estateCardJoinData);
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
 
         public IActionResult InsertMedia()
         {
-            ViewBag.proId=currentProjectId;
-            return View(_context.MediaType.ToList());
-        }
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+
+                ViewBag.proId = currentProjectId;
+                return View(_context.MediaType.ToList());
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
+         }
         [HttpPost]
         public async Task<IActionResult> InsertMedia(IFormFile image,int mediaType,bool ismain,int product)
         {
@@ -154,8 +191,15 @@ namespace Makaani.Controllers
 
         public IActionResult InsertLoactions()
         {
-            return View();
-        }
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
+            }
         [HttpPost]
         public IActionResult InsertLoactions(string label,string mapsLink,string note)
         {
@@ -220,12 +264,19 @@ namespace Makaani.Controllers
         }
         public IActionResult UpdateProducts(int productId)
         {
-            var product = _context.Product.Where(l => l.ProductId == productId).Single();
-            if (product == null)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                return NotFound();
+                var product = _context.Product.Where(l => l.ProductId == productId).Single();
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                return View(product);
             }
-            return View(product);
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
        [HttpPost]
         public IActionResult UpdateProducts(int productId,double area, int bathes, int bedroom, int living, int ludary
@@ -260,42 +311,58 @@ namespace Makaani.Controllers
         }
         public IActionResult DeleteProducts(int productId)
         {
-            var prod = _context.Product.Where(l => l.ProductId == productId).Single();
-            if (prod == null)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                return NotFound();
-            }
 
-            _context.Remove(prod);
-            _context.SaveChangesAsync();
-            return RedirectToAction("MyProducts");
+                var prod = _context.Product.Where(l => l.ProductId == productId).Single();
+                if (prod == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Remove(prod);
+                _context.SaveChangesAsync();
+                return RedirectToAction("MyProducts");
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         public IActionResult UpdateProfile()
         {
-            var users = _context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
-            var login = _context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
-            var role = _context.Role.ToList();
-            var profile = from u in users
-                          join l in login
-                          on u.UserId equals l.UserId
-                          join r in role on l.RoleId equals r.RoleId
-                          select new ProfileU
-                          {
-                              User = u,
-                              Login = l,
-                              Role = r
-                          };
-            var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("UserId")).ToList();
-            var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
-            var myFollower = from f in follower
-                             join u in user on f.FirstUserId equals u.UserId
-                             select new Followers
-                             {
-                                 Follower = f,
-                                 User = u
-                             };
-            ViewBag.Follower = myFollower;
-            return View(profile.ElementAt(0));
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+
+                var users = _context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                var login = _context.Login.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                var role = _context.Role.ToList();
+                var profile = from u in users
+                              join l in login
+                              on u.UserId equals l.UserId
+                              join r in role on l.RoleId equals r.RoleId
+                              select new ProfileU
+                              {
+                                  User = u,
+                                  Login = l,
+                                  Role = r
+                              };
+                var follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
+                var myFollower = from f in follower
+                                 join u in user on f.FirstUserId equals u.UserId
+                                 select new Followers
+                                 {
+                                     Follower = f,
+                                     User = u
+                                 };
+                ViewBag.Follower = myFollower;
+                return View(profile.ElementAt(0));
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         [HttpPost]
         public async Task<IActionResult> UpdateProfile(IFormFile image,string name,string address
@@ -350,160 +417,233 @@ namespace Makaani.Controllers
 
         public IActionResult Follower()
         {
-            var follower = _context.Follower.Where(a => a.FirstUserId == HttpContext.Session.GetInt32("UserId")).ToList();
-            var user =_context.User.Where(x=>x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
-            var myFollower = from f in follower
-                             join u in user on f.FirstUserId equals u.UserId
-                             select new Followers
-                             {
-                                 Follower = f,
-                                 User = u
-                             };
-            return View(myFollower);
-        }
-        public IActionResult FollowNewUser(int seondUserId)
-        {
-            var rec = _context.Follower.Where(x => x.FirstUserId == HttpContext.Session.GetInt32("UserId")
-               && x.SecondUserId == seondUserId).SingleOrDefault();
-            if(rec == null)
+
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                Follower follower = new Follower();
-                follower.FirstUserId = HttpContext.Session.GetInt32("UserId");
-                follower.SecondUserId = seondUserId;
-                _context.Add(follower);
-                _context.SaveChanges();
-                return RedirectToAction("Follower");
+                var follower = _context.Follower.Where(a => a.FirstUserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
+                var myFollower = from f in follower
+                                 join u in user on f.FirstUserId equals u.UserId
+                                 select new Followers
+                                 {
+                                     Follower = f,
+                                     User = u
+                                 };
+                return View(myFollower);
             }
             else
             {
-                ViewBag.mas = "Your'e Not Login OR You're Follwe This Saler Already";
-                return View("Error");
+                return RedirectToAction("Home", "Login");
             }
-           
+        }
+        public IActionResult FollowNewUser(int seondUserId)
+        {
+
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                var rec = _context.Follower.Where(x => x.FirstUserId == HttpContext.Session.GetInt32("UserId")
+               && x.SecondUserId == seondUserId).SingleOrDefault();
+                if (rec == null)
+                {
+                    Follower follower = new Follower();
+                    follower.FirstUserId = HttpContext.Session.GetInt32("UserId");
+                    follower.SecondUserId = seondUserId;
+                    _context.Add(follower);
+                    _context.SaveChanges();
+                    return RedirectToAction("Follower");
+                }
+                else
+                {
+                    ViewBag.mas = "Your'e Not Login OR You're Follwe This Saler Already";
+                    return View("Error");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
+
         }
 
         public IActionResult UnFollowUser(int follwerId)
         {
-            var recorde=_context.Follower.Where(x=>x.FollowerId == follwerId).Single();
-            if(recorde == null)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                return NotFound();
+                var recorde = _context.Follower.Where(x => x.FollowerId == follwerId).Single();
+                if (recorde == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _context.Remove(recorde);
+                    _context.SaveChanges();
+                    return RedirectToAction("Follower");
+                }
             }
             else
             {
-                _context.Remove(recorde);
-                _context.SaveChanges();
-                return RedirectToAction("Follower");
+                return RedirectToAction("Home", "Login");
             }
+
         }
         public IActionResult LastViewAds()
         {
-            var last = _context.LastViewAds.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
-            var ads= _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                var last = _context.LastViewAds.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                var ads = _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
 
-            var lastViewAds = from l in last
-                              join a in ads
-               on l.AdsId equals a.AdsId
-                              select new LastAds
-                              {
-                                  Ads=a,
-                                  LastViewAds=l
-                              };
-            return View(lastViewAds);
+                var lastViewAds = from l in last
+                                  join a in ads
+                   on l.AdsId equals a.AdsId
+                                  select new LastAds
+                                  {
+                                      Ads = a,
+                                      LastViewAds = l
+                                  };
+                return View(lastViewAds);
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         public async Task<IActionResult> ClearLastViewAds()
         {
-            List<LastViewAds>lastViewAds=_context.LastViewAds.Where(l=>l.UserId==HttpContext.Session.GetInt32("UserId")).ToList();
-            foreach(var lastViewAd in lastViewAds)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                _context.Remove(lastViewAd);
-                await _context.SaveChangesAsync();
-            }
+                List<LastViewAds> lastViewAds = _context.LastViewAds.Where(l => l.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                foreach (var lastViewAd in lastViewAds)
+                {
+                    _context.Remove(lastViewAd);
+                    await _context.SaveChangesAsync();
+                }
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         public async Task<IActionResult> RemoveLastViewAdsRecord(int recordId)
         {
-            var lastViewAds = _context.LastViewAds.Where(l => l.LastViewAdsId == recordId).Single();
-           if(lastViewAds == null)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                return NotFound();
+                var lastViewAds = _context.LastViewAds.Where(l => l.LastViewAdsId == recordId).Single();
+                if (lastViewAds == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Remove(lastViewAds);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
             }
-
-           _context.Remove(lastViewAds);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index");
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
 
         public IActionResult LoveList()
         {
-            int lovelistId=_context.LoveList.Where(x=>x.UserId == HttpContext.Session.GetInt32("UserId")).Single().LoveListId;
-            var loveItems = _context.LovedProductList.Where(x => x.LoveListId == lovelistId).ToList();
-            var ads=_context.Ads.ToList();
-            var product = _context.Product.ToList();
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                int lovelistId = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).Single().LoveListId;
+                var loveItems = _context.LovedProductList.Where(x => x.LoveListId == lovelistId).ToList();
+                var ads = _context.Ads.ToList();
+                var product = _context.Product.ToList();
 
-            var myLoveList = from l in loveItems
-                             join p in product on
-         l.ProductId equals p.ProductId
-                             join a in ads on p.ProductId equals a.ProductId
-                             select new LoveListItem
-                             {
-                                 LovedProductList=l,
-                                 Product=p,
-                                 Ads=a
-                             };
-            return View(myLoveList);
+                var myLoveList = from l in loveItems
+                                 join p in product on
+             l.ProductId equals p.ProductId
+                                 join a in ads on p.ProductId equals a.ProductId
+                                 select new LoveListItem
+                                 {
+                                     LovedProductList = l,
+                                     Product = p,
+                                     Ads = a
+                                 };
+                return View(myLoveList);
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
         public IActionResult InsertToLoveList(int productId)
         {
-            var recorde = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).SingleOrDefault();
-            if (recorde == null)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                LoveList loveList=new LoveList();
-                loveList.UserId =(int) HttpContext.Session.GetInt32("Id");
-                _context.Add(loveList);
-                _context.SaveChanges();
+                var recorde = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).SingleOrDefault();
+                if (recorde == null)
+                {
+                    LoveList loveList = new LoveList();
+                    loveList.UserId = (int)HttpContext.Session.GetInt32("Id");
+                    _context.Add(loveList);
+                    _context.SaveChanges();
 
 
-                LovedProductList lovedProduct = new LovedProductList();
-                lovedProduct.ProductId = productId;
-                lovedProduct.LoveListId = _context.LoveList.OrderByDescending(x=>x.LoveListId).First().LoveListId;
-                _context.Add(lovedProduct);
-                _context.SaveChanges();
+                    LovedProductList lovedProduct = new LovedProductList();
+                    lovedProduct.ProductId = productId;
+                    lovedProduct.LoveListId = _context.LoveList.OrderByDescending(x => x.LoveListId).First().LoveListId;
+                    _context.Add(lovedProduct);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    LovedProductList lovedProduct = new LovedProductList();
+                    lovedProduct.ProductId = productId;
+                    lovedProduct.LoveListId = recorde.LoveListId;
+                    _context.Add(lovedProduct);
+                    _context.SaveChanges();
+
+                }
+                return RedirectToAction("LoveList");
             }
             else
             {
-                LovedProductList lovedProduct = new LovedProductList();
-                lovedProduct.ProductId = productId;
-                lovedProduct.LoveListId = recorde.LoveListId;
-                _context.Add(lovedProduct);
-                _context.SaveChanges();
-
+                return RedirectToAction("Home", "Login");
             }
-            return RedirectToAction("LoveList");
         }
         public IActionResult DeleteFromLoveList(int productId)
         {
-            var recorde = _context.LovedProductList.Where(x => x.ProductId == productId).Single();
-            if (recorde == null)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                return NotFound();
+                var recorde = _context.LovedProductList.Where(x => x.ProductId == productId).Single();
+                if (recorde == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _context.Remove(recorde);
+                    _context.SaveChanges();
+
+                }
+                return RedirectToAction("LoveList");
             }
             else
             {
-                _context.Remove(recorde);
-                _context.SaveChanges();
-               
+                return RedirectToAction("Home", "Login");
             }
-            return RedirectToAction("LoveList");
         }
         //step-4
         public IActionResult InsertAds()
         {
-            ViewBag.cat = _context.Category.ToList();
-            ViewBag.dep = _context.Department.ToList();
-            return View();
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                ViewBag.cat = _context.Category.ToList();
+                ViewBag.dep = _context.Department.ToList();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
        
         [HttpPost]
@@ -536,10 +676,10 @@ namespace Makaani.Controllers
             }
             else
             {
-                return NotFound();
+                return RedirectToAction("Home", "Login");
             }
 
-           
+
         }
         [HttpPost]
         public async Task<IActionResult> UpdateAdsMainInfo(int adsId,string title,double price,string description
@@ -600,30 +740,44 @@ namespace Makaani.Controllers
 
         public IActionResult OutGoingPayingOffer()
         {
-            var offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
-            var users = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
-            var product = _context.Product.Where(x => x.OwnerId != HttpContext.Session.GetInt32("UserId")).ToList();
-            var ads = _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                var offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                var users = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
+                var product = _context.Product.Where(x => x.OwnerId != HttpContext.Session.GetInt32("UserId")).ToList();
+                var ads = _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
 
-            var recivedPayOffers = from o in offers
-                                   join p in product on o.ProductId equals p.ProductId
-                                   join a in ads on o.ProductId equals a.ProductId
-                                   join u in users on a.UserId equals u.UserId
-                                   select new UsersPayingOffers
-                                   {
-                                       Product = p,
-                                       Ads = a,
-                                       PayingOffer = o,
-                                       User = u
-                                   };
-            return View(recivedPayOffers);
+                var recivedPayOffers = from o in offers
+                                       join p in product on o.ProductId equals p.ProductId
+                                       join a in ads on o.ProductId equals a.ProductId
+                                       join u in users on a.UserId equals u.UserId
+                                       select new UsersPayingOffers
+                                       {
+                                           Product = p,
+                                           Ads = a,
+                                           PayingOffer = o,
+                                           User = u
+                                       };
+                return View(recivedPayOffers);
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
             //return View(offers);
         }
 
         public IActionResult SendPayOffer(int adsId)
         {
-            var ads = _context.Ads.Where(x => x.AdsId == adsId).SingleOrDefault();
-            return View(ads);
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                var ads = _context.Ads.Where(x => x.AdsId == adsId).SingleOrDefault();
+                return View(ads);
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
 
        [HttpPost]
@@ -642,12 +796,19 @@ namespace Makaani.Controllers
         }
         public IActionResult UpdatePayOffer(int offerId)
         {
-            var payingOffer = _context.PayingOffer.Where(x => x.PayingOfferId == offerId).Single();
-            if (payingOffer == null)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                return NotFound();
+                var payingOffer = _context.PayingOffer.Where(x => x.PayingOfferId == offerId).Single();
+                if (payingOffer == null)
+                {
+                    return NotFound();
+                }
+                return View(payingOffer);
             }
-            return View(payingOffer);
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
 
 
@@ -672,40 +833,9 @@ namespace Makaani.Controllers
         }
         public IActionResult DeletePayOffer(int offerId)
         {
-            var recorde = _context.PayingOffer.Where(x => x.PayingOfferId == offerId).Single();
-            if (recorde == null)
+            if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                return NotFound();
-            }
-            else
-            {
-                _context.Remove(recorde);
-                _context.SaveChanges();
-
-            }
-            return RedirectToAction("OutGoingPayingOffer");
-
-        }
-        public IActionResult Searches()
-        {
-            return View(_context.UserSearch.ToList());
-        }
-
-        public IActionResult DeleteSearch(bool deleteAll,int searchId)
-        {
-            if (deleteAll)
-            {
-                List<UserSearch> searches = _context.UserSearch.Where(x=> x.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
-                foreach (UserSearch search in searches)
-                {
-                    _context.Remove(search);
-                    _context.SaveChanges();
-                }
-               
-            }
-            else
-            {
-                var recorde = _context.UserSearch.Where(x => x.UserSearchId == searchId).Single();
+                var recorde = _context.PayingOffer.Where(x => x.PayingOfferId == offerId).Single();
                 if (recorde == null)
                 {
                     return NotFound();
@@ -716,14 +846,73 @@ namespace Makaani.Controllers
                     _context.SaveChanges();
 
                 }
-                
+                return RedirectToAction("OutGoingPayingOffer");
             }
-            return RedirectToAction("Searches");
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
+
+        }
+        public IActionResult Searches()
+        {
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                return View(_context.UserSearch.ToList());
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
+        }
+
+        public IActionResult DeleteSearch(bool deleteAll,int searchId)
+        {
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                if (deleteAll)
+                {
+                    List<UserSearch> searches = _context.UserSearch.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
+                    foreach (UserSearch search in searches)
+                    {
+                        _context.Remove(search);
+                        _context.SaveChanges();
+                    }
+
+                }
+                else
+                {
+                    var recorde = _context.UserSearch.Where(x => x.UserSearchId == searchId).Single();
+                    if (recorde == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        _context.Remove(recorde);
+                        _context.SaveChanges();
+
+                    }
+
+                }
+                return RedirectToAction("Searches");
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
      
         public IActionResult InsertTesti()
         {
-            return View();
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
 
         [HttpPost]
@@ -743,9 +932,16 @@ namespace Makaani.Controllers
 
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                HttpContext.Session.Clear();
 
-            return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
         }
     }
 
