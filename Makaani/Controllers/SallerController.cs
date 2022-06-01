@@ -201,17 +201,41 @@ namespace Makaani.Controllers
             }
             }
         [HttpPost]
-        public IActionResult InsertLoactions(string label,string mapsLink,string note)
+        public IActionResult InsertLoactions(string label,string mapsLink,string note, int placeId)
         {
             Location location = new Location();
             location.MapsLink = mapsLink;
             location.LoactionLabel = label;
             location.Notes = note;
+            location.ProvincesId = placeId;
             _context.Add(location);
             _context.SaveChanges();
 
             currentLocationId= _context.Location.OrderByDescending(x => x.LoactionId).First().LoactionId;
 
+            return RedirectToAction("InsertFeatures");
+        }
+
+        public IActionResult InsertFeatures()
+        {
+            if (HttpContext.Session.GetInt32("UserId") != 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Home", "Login");
+            }
+        }
+        [HttpPost]
+        public IActionResult InsertFeatures(string title, string desc, string note)
+        {
+             Feature feature = new Feature();
+               feature.Title = title;
+               feature.Description = desc;
+            feature.ProductId = currentProjectId;
+            _context.Add(feature);
+            _context.SaveChanges();
             return RedirectToAction("InsertAds");
         }
         public IActionResult InsertProducts()
