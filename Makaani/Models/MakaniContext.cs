@@ -309,9 +309,7 @@ namespace Makaani.Models
 
             modelBuilder.Entity<Media>(entity =>
             {
-                entity.Property(e => e.MediaId)
-                    .HasColumnName("MediaID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.MediaId).HasColumnName("MediaID");
 
                 entity.Property(e => e.Path).IsUnicode(false);
 
