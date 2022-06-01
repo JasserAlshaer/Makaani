@@ -28,7 +28,7 @@ namespace Makaani.Controllers
         public IActionResult Index()
         {
 
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 
             
@@ -60,7 +60,7 @@ namespace Makaani.Controllers
         }
         public IActionResult Profile()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
 
                 var users = _context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
@@ -108,7 +108,7 @@ namespace Makaani.Controllers
         public IActionResult MyProducts()
         {
 
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                
            
@@ -153,7 +153,7 @@ namespace Makaani.Controllers
 
         public IActionResult InsertMedia()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
 
                 ViewBag.proId = currentProjectId;
@@ -193,7 +193,7 @@ namespace Makaani.Controllers
 
         public IActionResult InsertLoactions()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 return View();
             }
@@ -220,7 +220,7 @@ namespace Makaani.Controllers
 
         public IActionResult InsertFeatures()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 return View();
             }
@@ -290,7 +290,7 @@ namespace Makaani.Controllers
         }
         public IActionResult UpdateProducts(int productId)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var product = _context.Product.Where(l => l.ProductId == productId).Single();
                 if (product == null)
@@ -337,7 +337,7 @@ namespace Makaani.Controllers
         }
         public IActionResult DeleteProducts(int productId)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
 
                 var prod = _context.Product.Where(l => l.ProductId == productId).Single();
@@ -357,7 +357,7 @@ namespace Makaani.Controllers
         }
         public IActionResult UpdateProfile()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
 
                 var users = _context.User.Where(u => u.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
@@ -444,7 +444,7 @@ namespace Makaani.Controllers
         public IActionResult Follower()
         {
 
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var follower = _context.Follower.Where(a => a.FirstUserId == HttpContext.Session.GetInt32("UserId")).ToList();
                 var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
@@ -465,7 +465,7 @@ namespace Makaani.Controllers
         public IActionResult FollowNewUser(int seondUserId)
         {
 
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var rec = _context.Follower.Where(x => x.FirstUserId == HttpContext.Session.GetInt32("UserId")
                && x.SecondUserId == seondUserId).SingleOrDefault();
@@ -493,7 +493,7 @@ namespace Makaani.Controllers
 
         public IActionResult UnFollowUser(int follwerId)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var recorde = _context.Follower.Where(x => x.FollowerId == follwerId).Single();
                 if (recorde == null)
@@ -515,7 +515,7 @@ namespace Makaani.Controllers
         }
         public IActionResult LastViewAds()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var last = _context.LastViewAds.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
                 var ads = _context.Ads.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
@@ -537,7 +537,7 @@ namespace Makaani.Controllers
         }
         public async Task<IActionResult> ClearLastViewAds()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 List<LastViewAds> lastViewAds = _context.LastViewAds.Where(l => l.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
                 foreach (var lastViewAd in lastViewAds)
@@ -555,7 +555,7 @@ namespace Makaani.Controllers
         }
         public async Task<IActionResult> RemoveLastViewAdsRecord(int recordId)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var lastViewAds = _context.LastViewAds.Where(l => l.LastViewAdsId == recordId).Single();
                 if (lastViewAds == null)
@@ -576,7 +576,7 @@ namespace Makaani.Controllers
 
         public IActionResult LoveList()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 int lovelistId = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).Single().LoveListId;
                 var loveItems = _context.LovedProductList.Where(x => x.LoveListId == lovelistId).ToList();
@@ -602,7 +602,7 @@ namespace Makaani.Controllers
         }
         public IActionResult InsertToLoveList(int productId)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var recorde = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).SingleOrDefault();
                 if (recorde == null)
@@ -637,7 +637,7 @@ namespace Makaani.Controllers
         }
         public IActionResult DeleteFromLoveList(int productId)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var recorde = _context.LovedProductList.Where(x => x.ProductId == productId).Single();
                 if (recorde == null)
@@ -660,7 +660,7 @@ namespace Makaani.Controllers
         //step-4
         public IActionResult InsertAds()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 ViewBag.cat = _context.Category.ToList();
                 ViewBag.dep = _context.Department.ToList();
@@ -766,7 +766,7 @@ namespace Makaani.Controllers
 
         public IActionResult OutGoingPayingOffer()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).ToList();
                 var users = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
@@ -795,7 +795,7 @@ namespace Makaani.Controllers
 
         public IActionResult SendPayOffer(int adsId)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var ads = _context.Ads.Where(x => x.AdsId == adsId).SingleOrDefault();
                 return View(ads);
@@ -822,7 +822,7 @@ namespace Makaani.Controllers
         }
         public IActionResult UpdatePayOffer(int offerId)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var payingOffer = _context.PayingOffer.Where(x => x.PayingOfferId == offerId).Single();
                 if (payingOffer == null)
@@ -859,7 +859,7 @@ namespace Makaani.Controllers
         }
         public IActionResult DeletePayOffer(int offerId)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var recorde = _context.PayingOffer.Where(x => x.PayingOfferId == offerId).Single();
                 if (recorde == null)
@@ -882,7 +882,7 @@ namespace Makaani.Controllers
         }
         public IActionResult Searches()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 return View(_context.UserSearch.ToList());
             }
@@ -894,7 +894,7 @@ namespace Makaani.Controllers
 
         public IActionResult DeleteSearch(bool deleteAll,int searchId)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 if (deleteAll)
                 {
@@ -931,7 +931,7 @@ namespace Makaani.Controllers
      
         public IActionResult InsertTesti()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 return View();
             }
@@ -999,7 +999,7 @@ namespace Makaani.Controllers
         }
         public IActionResult Logout()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 HttpContext.Session.Clear();
 

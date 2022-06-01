@@ -80,7 +80,7 @@ namespace Makaani.Controllers
         public IActionResult SearchForEstate(string keyWord,int budget, int categotyId,int placeId,int finishiesId)
         {
 
-            if (HttpContext.Session.GetInt32("UserId") == 0)
+            if (HttpContext.Session.GetInt32("UserId") == null)
             {
                 //UserSearch userSearch = new UserSearch();
                 //userSearch.SearchTitle = keyWord;
@@ -369,13 +369,13 @@ namespace Makaani.Controllers
 
         public IActionResult Login()
         {
-            if (HttpContext.Session.GetInt32("UserId") == 0)
+            if (HttpContext.Session.GetInt32("UserId") == null)
             {
                 return View();
             }
             else
             {
-                return RedirectToAction("Saller","Index");
+                return RedirectToAction("Index","Saller");
             }
           
         }
@@ -423,13 +423,13 @@ namespace Makaani.Controllers
 
         public IActionResult Register()
         {
-            if (HttpContext.Session.GetInt32("UserId") == 0)
+            if (HttpContext.Session.GetInt32("UserId") == null)
             {
                 return View();
             }
             else
             {
-                return RedirectToAction("Saller", "Index");
+                return RedirectToAction("Index", "Saller");
             }
         }
         [HttpPost]
@@ -460,7 +460,7 @@ namespace Makaani.Controllers
 
         public IActionResult SearchForEstateFromDashboard(string keyWord, int budget, int categotyId, int placeId, int finishiesId)
         {
-            if (HttpContext.Session.GetInt32("UserId") == 0)
+            if (HttpContext.Session.GetInt32("UserId") == null)
             {
                 //UserSearch userSearch   =new UserSearch();
                 //userSearch.SearchTitle = keyWord;
