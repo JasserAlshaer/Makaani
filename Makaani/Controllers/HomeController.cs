@@ -79,6 +79,29 @@ namespace Makaani.Controllers
         [HttpPost]
         public IActionResult SearchForEstate(string keyWord,int budget, int categotyId,int placeId,int finishiesId)
         {
+
+            if (HttpContext.Session.GetInt32("UserId") == 0)
+            {
+                UserSearch userSearch = new UserSearch();
+                userSearch.SearchTitle = keyWord;
+                userSearch.CategoryId = categotyId;
+                userSearch.PlaceId = placeId;
+                userSearch.UserId = 6;
+                _context.Add(userSearch);
+                _context.SaveChanges();
+            }
+            else
+            {
+                UserSearch userSearch = new UserSearch();
+                userSearch.SearchTitle = keyWord;
+                userSearch.CategoryId = categotyId;
+                userSearch.PlaceId = placeId;
+                userSearch.UserId = HttpContext.Session.GetInt32("UserId");
+                _context.Add(userSearch);
+                _context.SaveChanges();
+            }
+
+
             var EsatateCategory = _context.Category.ToList();
             if (categotyId != 0)
             {
@@ -202,7 +225,39 @@ namespace Makaani.Controllers
         
         
         {
-            int productId =(int) _context.Ads.Where(x => x.ProductId == id).Single().ProductId;
+
+            if (HttpContext.Session.GetInt32("UserId") == 0)
+            {
+                LastViewAds lastViewAds = new LastViewAds();
+                lastViewAds.LastViewAt = DateTime.Now;
+                lastViewAds.AdsId = id;
+                lastViewAds.UserId = 6;
+                _context.Add(lastViewAds);
+                _context.SaveChanges();
+            }
+            else
+            {
+                var record=_context.LastViewAds.Where(x=>x.UserId == HttpContext.Session.GetInt32("UserId")
+                && x.AdsId==id).SingleOrDefault();
+                if (record == null)
+                {
+                    LastViewAds lastViewAds = new LastViewAds();
+                    lastViewAds.LastViewAt = DateTime.Now;
+                    lastViewAds.AdsId = id;
+                    lastViewAds.UserId = HttpContext.Session.GetInt32("UserId");
+                    _context.Add(lastViewAds);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    record.LastViewAt = DateTime.Now;
+                    _context.Update(record);
+                    _context.SaveChanges(true);
+
+                }
+            }
+
+            int productId =(int) _context.Ads.Where(x => x.AdsId == id).Single().ProductId;
             var media = _context.Media.Where(x=> x.ProductId== productId).ToList();
           
             var category = _context.Category.ToList();
@@ -291,7 +346,7 @@ namespace Makaani.Controllers
         public IActionResult Testimonials()
         {
             var users=_context.User.ToList();
-            var testiomonails=_context.Testimonails.ToList();
+            var testiomonails=_context.Testimonails.Where(x=>x.IsAccepted==true).ToList();
 
             var UserFeeds = from u in users
                             join t in testiomonails
@@ -317,7 +372,15 @@ namespace Makaani.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            if (HttpContext.Session.GetInt32("UserId") == 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Saller","Index");
+            }
+          
         }
         [HttpPost]
         public IActionResult Login(String accountUser, String Password)
@@ -363,7 +426,14 @@ namespace Makaani.Controllers
 
         public IActionResult Register()
         {
-            return View();
+            if (HttpContext.Session.GetInt32("UserId") == 0)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Saller", "Index");
+            }
         }
         [HttpPost]
         public IActionResult Register(string first,string second, string Address, string Nationality, DateTime? BirthDate,String Email,String Password,String Phone)
@@ -393,7 +463,27 @@ namespace Makaani.Controllers
 
         public IActionResult SearchForEstateFromDashboard(string keyWord, int budget, int categotyId, int placeId, int finishiesId)
         {
-            var EsatateCategory = _context.Category.ToList();
+            if (HttpContext.Session.GetInt32("UserId") == 0)
+            {
+                UserSearch userSearch   =new UserSearch();
+                userSearch.SearchTitle = keyWord;
+                userSearch.CategoryId = categotyId;
+                userSearch.PlaceId = placeId;
+                userSearch.UserId = 6;
+                _context.Add(userSearch);
+                _context.SaveChanges();
+            }
+            else
+            {
+                UserSearch userSearch = new UserSearch();
+                userSearch.SearchTitle = keyWord;
+                userSearch.CategoryId = categotyId;
+                userSearch.PlaceId = placeId;
+                userSearch.UserId = HttpContext.Session.GetInt32("UserId");
+                _context.Add(userSearch);
+                _context.SaveChanges();
+            }
+                var EsatateCategory = _context.Category.ToList();
             if (categotyId != 0)
             {
                 EsatateCategory = _context.Category.Where(x => x.CategoryId == categotyId).ToList();
