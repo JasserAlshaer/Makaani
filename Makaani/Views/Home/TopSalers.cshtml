@@ -5,8 +5,8 @@
         <div class="container-xxl py-5">
             <div class="container">
                 <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-                    <h1 class="mb-3">Top Sallers</h1>
-                    <p>Top Saller In Makani Web Site </p>
+                    <h1 class="mb-3">Top Sellers</h1>
+                    <p>Top Seller In Makani Web Site </p>
                 </div>
                 <div class="row g-4">
                     @foreach (var item in Model)
@@ -20,7 +20,7 @@
                             <div class="text-center p-4 mt-3">
                                 <h5 class="fw-bold mb-0">@item.FullName</h5>
                                 <small>@item.JoiningDate</small>
-                                  <a asp-controller="Saller" asp-action="FollowNewUser" asp-route-seondUserId="@item.UserId" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Follow</a>
+                                  <a asp-controller="Seller" asp-action="FollowNewUser" asp-route-seondUserId="@item.UserId" class="btn btn-primary py-3 px-5 me-3 animated fadeIn">Follow</a>
                             </div>
                         </div>
                       </div>

@@ -332,11 +332,11 @@ namespace Makaani.Controllers
             return View(_context.Category.ToList());
         }
 
-        public IActionResult TopSallers()
+        public IActionResult TopSellers()
         {
             var ads=_context.Ads.ToList();
             var users=_context.User.ToList();   
-            List <User> topSallers=new List<User>();
+            List <User> topSellers=new List<User>();
             foreach (User u in users)
             {
                 int sum = 0;
@@ -349,11 +349,11 @@ namespace Makaani.Controllers
                 }
                 if (sum >= 1)
                 {
-                    topSallers.Add(u);
+                    topSellers.Add(u);
                 }
             }
 
-            return View("TopSalers",topSallers );
+            return View("TopSalers",topSellers );
         }
 
         public IActionResult Testimonials()
@@ -391,7 +391,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Index","Saller");
+                return RedirectToAction("Index","Seller");
             }
           
         }
@@ -414,7 +414,7 @@ namespace Makaani.Controllers
                     {
                         return RedirectToAction("Index", "Admin");
                     }
-                    return RedirectToAction("Index", "Saller");
+                    return RedirectToAction("Index", "Seller");
                 }
             }
             else
@@ -431,7 +431,7 @@ namespace Makaani.Controllers
                     {
                         return RedirectToAction("Index", "Admin");
                     }
-                    return RedirectToAction("Index", "Saller");
+                    return RedirectToAction("Index", "Seller");
                 }
             }
             
@@ -445,7 +445,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Saller");
+                return RedirectToAction("Index", "Seller");
             }
         }
         [HttpPost]

@@ -20,7 +20,7 @@ namespace Makaani.Controllers
                 ViewBag.Ads = _context.Ads.Count();
                 ViewBag.Customer = _context.Login.Where(x => x.RoleId == 1).Count();
                 ViewBag.Testimonoials = _context.Testimonails.Count();
-                ViewBag.Saller = _context.Login.Where(x => x.RoleId == 2).Count();
+                ViewBag.Seller = _context.Login.Where(x => x.RoleId == 2).Count();
                 ViewBag.Searches = _context.UserSearch.ToList();
                 ViewBag.Last = _context.LastViewAds.Count();
                 ViewBag.PayOffer = _context.PayingOffer.Count();

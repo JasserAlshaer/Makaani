@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Makaani.Controllers
 {
-    public class SallerController : Controller
+    public class SellerController : Controller
     {
         private readonly MakaniContext _context;
         private readonly IWebHostEnvironment _env;
@@ -19,7 +19,7 @@ namespace Makaani.Controllers
         public static int currentLocationId;
         
 
-        public SallerController(MakaniContext context, IWebHostEnvironment environment)
+        public SellerController(MakaniContext context, IWebHostEnvironment environment)
         {
             _context = context;
             _env = environment;
