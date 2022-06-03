@@ -47,8 +47,10 @@ a-scene {
 	                                        @foreach (var item in Model.Item2)
                                                   { 
 	                                            <div class="carousel-item">
-                                                <img src="~/uploads/property-1.jpg" style="padding:15px;" width="300" height="300" class="d-block w-100" alt="...">
-                                                  </div>
+													@if(@item.MediaTypeId==1){
+                                                <img src="~/uploads/@item.Path" style="padding:15px;" width="300" height="300" class="d-block w-100" alt="...">
+                                            }      
+											</div>
                                            }
  
 
@@ -74,18 +76,42 @@ a-scene {
 
 						  </div>
 						</div>
-
-
-						<br /> 
-						<br />
-										<div class="row">
-					<button class="col-3  add-to-cart btn btn-default" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="margin-right:25px; margin-left:45px;" >
+                                     <div class="d-flex" style="margin-top:-70px;"> 
+                                        <button class=" btn btn-primary flex-fill text-center border-end py-2" style="border-color:white; width:60px"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                           
+									             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-badge-vr" viewBox="0 0 16 16">
+  <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
+  <path d="M4.508 11h1.429l1.99-5.999H6.61L5.277 9.708H5.22L3.875 5.001H2.5L4.508 11zm6.387-5.999H8.5V11h1.173V8.763h1.064L11.787 11h1.327L11.91 8.583C12.455 8.373 13 7.779 13 6.9c0-1.147-.773-1.9-2.105-1.9zm-1.222 2.87V5.933h1.05c.63 0 1.05.347 1.05.989 0 .633-.408.95-1.067.95H9.673z"/>
+</svg>
+								          
+                                          </button> 
+                                      <i class="fa-solid fa-360-degrees"></i>
+										   <button class="btn btn-primary flex-fill text-center py-2" style="border-color:white; width:60px;" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                                            
+                                          
+									               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z"/>
+</svg>
+								           
+                                       </button>
+									     <button class=" btn btn-primary flex-fill text-center border-end py-2" style="border-color:white; width:60px">
+                                           
+                                           <a asp-controller="Saller" asp-action="InsertToLoveList"  asp-route-id="@Model.Item1.ElementAt(0).Ads.ProductId" >
+									                 <span class="fa fa-heart" style="color:white;"></span>
+								           </a>
+                                        </button>
+                                     
+                                    </div>
+									  
+			@*<div class="row">
+				
+					<button class="col-4  add-to-cart btn btn-default" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="margin-right:25px; margin-left:45px;" >
 								
 						Open Video
 			       </button>
 
 								
-                <button class="col-3  add-to-cart btn btn-default" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right:25px;">		
+                <button class="col- add-to-cart btn btn-default" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right:25px;">		
 				     Open 360 Image
 				</button>
 			
@@ -95,15 +121,22 @@ a-scene {
 								</a>
 							
 						   </button>
-						   
+				</div>
 						   	<button class="offset-2 col-8 offset-2 add-to-cart btn btn-default" type="button" style="margin-top:12px;">
 								<a asp-controller="Saller" asp-action="SendPayOffer"  asp-route-adsId="@Model.Item1.ElementAt(0).Ads.AdsId" style="color:white;">
 									Send Pay Offer
 								</a>
 								</button>
-				</div>
+				
 						
 
+					</div>*@
+					 <button class="btn btn-primary col-12  text-center py-2" style="border-color:white;">
+                                            
+                                          <a asp-controller="Saller" asp-action="SendPayOffer"  asp-route-adsId="@Model.Item1.ElementAt(0).Ads.AdsId" style="color:white;">
+									              Send Pay Offer
+								             </a>
+                                       </button>
 					</div>
 					<div class="details col-md-5">
 						<h3 class="product-title">@Model.Item1.ElementAt(0).Ads.Title</h3>
@@ -120,8 +153,6 @@ a-scene {
 							<br />
 							<span class="size" data-toggle="tooltip" title="small">@Model.Item1.ElementAt(0).Location.LoactionLabel</span>
 							<span class="size" data-toggle="tooltip" title="medium">@Model.Item1.ElementAt(0).Location.Notes</span>
-@*							<span class="size" data-toggle="tooltip" title="large">@Model.ElementAt(0).Location.</span>*@
-							
 						</h5>
 						<hr />
 						<br />
