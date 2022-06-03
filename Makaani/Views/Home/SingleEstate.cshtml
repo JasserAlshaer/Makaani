@@ -3,6 +3,7 @@
 @{
 	
 	var view=ViewBag.adsViews;
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +42,7 @@ a-scene {
 							  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                                     <div class="carousel-inner" style="padding:15px;">
                                         <div class="carousel-item active" >
-                                             <img src="~/uploads/property-6.jpg" width="300" height="300" style="padding:15px;" class="d-block w-100" alt="...">
+                                             <img src="~/uploads/property-6.jpg" width="300" height="390" style="padding:15px;" class="d-block w-100" alt="...">
                                            </div>
 	 
 	                                        @foreach (var item in Model.Item2)
@@ -63,21 +64,14 @@ a-scene {
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
-@*  <button class="add-to-cart btn btn-default" type="button" style="margin-left:150px;" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
- 
-	Previous
-  </button>
-  <button class="add-to-cart btn btn-default" type="button" style="margin-left:150px;" data-bs-target="#carouselExampleControls" data-bs-slide="next">
- 
-	Next
-  </button>*@
 
 </div>
 
 						  </div>
 						</div>
-                                     <div class="d-flex" style="margin-top:-70px;"> 
-                                        <button class=" btn btn-primary flex-fill text-center border-end py-2" style="border-color:white; width:60px"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+						<div style="position:absolute; top:63%;left:11%">
+                                     <div class="d-flex" > 
+                                        <button class=" btn btn-primary flex-fill text-center border-end py-2" style="border-color:white; width:180px"  data-bs-toggle="modal" data-bs-target="#exampleModal">
                                            
 									             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-badge-vr" viewBox="0 0 16 16">
   <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
@@ -86,7 +80,7 @@ a-scene {
 								          
                                           </button> 
                                       <i class="fa-solid fa-360-degrees"></i>
-										   <button class="btn btn-primary flex-fill text-center py-2" style="border-color:white; width:60px;" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+										   <button class="btn btn-primary flex-fill text-center py-2" style="border-color:white; width:180px;" data-bs-toggle="modal" data-bs-target="#exampleModal2">
                                             
                                           
 									               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
@@ -94,44 +88,17 @@ a-scene {
 </svg>
 								           
                                        </button>
-									     <button class=" btn btn-primary flex-fill text-center border-end py-2" style="border-color:white; width:60px">
+									     <button class=" btn btn-primary flex-fill text-center border-end py-2" style="border-color:white; width:180px">
                                            
                                            <a asp-controller="Seller" asp-action="InsertToLoveList"  asp-route-id="@Model.Item1.ElementAt(0).Ads.ProductId" >
 									                 <span class="fa fa-heart" style="color:white;"></span>
 								           </a>
                                         </button>
-                                     
+                                    
                                     </div>
+									</div>
 									  
-			@*<div class="row">
-				
-					<button class="col-4  add-to-cart btn btn-default" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" style="margin-right:25px; margin-left:45px;" >
-								
-						Open Video
-			       </button>
-
-								
-                <button class="col- add-to-cart btn btn-default" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right:25px;">		
-				     Open 360 Image
-				</button>
-			
-							<button class=" col-3 like btn btn-default" type="button" style="margin-right:25px;" >
-								<a asp-controller="Seller" asp-action="InsertToLoveList"  asp-route-id="@Model.Item1.ElementAt(0).Ads.ProductId">
-									<span class="fa fa-heart" style="color:white;"></span>
-								</a>
-							
-						   </button>
-				</div>
-						   	<button class="offset-2 col-8 offset-2 add-to-cart btn btn-default" type="button" style="margin-top:12px;">
-								<a asp-controller="Seller" asp-action="SendPayOffer"  asp-route-adsId="@Model.Item1.ElementAt(0).Ads.AdsId" style="color:white;">
-									Send Pay Offer
-								</a>
-								</button>
-				
-						
-
-					</div>*@
-					 <button class="btn btn-primary col-12  text-center py-2" style="border-color:white;">
+					  <button class="btn btn-primary col-4  text-center py-2" style="position:absolute; top:71%;left:16%">
                                             
                                           <a asp-controller="Seller" asp-action="SendPayOffer"  asp-route-adsId="@Model.Item1.ElementAt(0).Ads.AdsId" style="color:white;">
 									              Send Pay Offer
@@ -139,6 +106,8 @@ a-scene {
                                        </button>
 					</div>
 					<div class="details col-md-5">
+						 <br />
+						  <br />
 						<h3 class="product-title">@Model.Item1.ElementAt(0).Ads.Title</h3>
 						<div class="rating">
 							
@@ -150,9 +119,15 @@ a-scene {
 						<h4 class="price">current price: <span>$ @Model.Item1.ElementAt(0).Ads.Price</span></h4>
 
 						<h5 class="sizes">Location :
+							
+							@Model.Item1.ElementAt(0).Location.LoactionLabel
 							<br />
-							<span class="size" data-toggle="tooltip" title="small">@Model.Item1.ElementAt(0).Location.LoactionLabel</span>
-							<span class="size" data-toggle="tooltip" title="medium">@Model.Item1.ElementAt(0).Location.Notes</span>
+							@Model.Item1.ElementAt(0).Location.Notes
+						</h5>
+						<h5 class="sizes">Notes :
+							
+							
+							@Model.Item1.ElementAt(0).Location.Notes
 						</h5>
 						<hr />
 						<br />
