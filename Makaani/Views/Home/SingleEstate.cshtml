@@ -176,9 +176,18 @@ a-scene {
                 <div class="modal-body">
 				
                 <div id="myEmbeddedScene">
-  <a-scene embedded>
-      <a-sky src="https://images.unsplash.com/photo-1596263576925-d90d63691097?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1622&q=80"></a-sky> 
-  </a-scene>
+					
+	                                        @foreach (var item in Model.Item2)
+						{
+							@if (@item.MediaTypeId == 3)
+							{
+								<a-scene embedded>
+                                      <a-sky src="@item.Path"></a-sky> 
+                                </a-scene>
+							}
+							
+                       }  
+
 </div>
                 </div>
                 <div class="modal-footer">
@@ -199,11 +208,19 @@ a-scene {
                 </div>
                 <div class="modal-body">
 				<div class="row">
-				   <video class="col-12" style="margin-top:80px;" height="400" controls>
-                       <source src="mov_bbb.mp4" type="video/mp4">
+					                    @foreach (var item in Model.Item2)
+						{
+							@if (@item.MediaTypeId == 2)
+							{
+								 <video class="col-12" style="margin-top:80px;" height="400" controls>
+                       <source src="@item.Path" type="video/mp4">
                         <source src="mov_bbb.ogg" type="video/ogg">
                         Your browser does not support HTML video.
                     </video>
+							}
+							
+                       }  
+				  
 				</div>
 
                 </div>

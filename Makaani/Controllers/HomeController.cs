@@ -82,13 +82,7 @@ namespace Makaani.Controllers
 
             if (HttpContext.Session.GetInt32("UserId") == null)
             {
-                //UserSearch userSearch = new UserSearch();
-                //userSearch.SearchTitle = keyWord;
-                //userSearch.CategoryId = categotyId;
-                //userSearch.PlaceId = placeId;
-                //userSearch.UserId = 6;
-                //_context.Add(userSearch);
-                //_context.SaveChanges();
+               
             }
             else
             {
