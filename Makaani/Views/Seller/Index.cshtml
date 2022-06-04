@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Makaani.Models.ProvidedOffers>;
 @{
-    Layout = "_LayoutSaler";
+    Layout = "_LayoutSeller";
     var follower=ViewBag.Follower;
     var loveList=ViewBag.LoveList;
     var payyingOffer=ViewBag.Offers;
@@ -25,7 +25,7 @@
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
-              <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
+              <div class="icon icon-lg icon-shape bg-gradient-success shadow-primary text-center border-radius-xl mt-n4 position-absolute">
                 <i class="material-icons opacity-10">person</i>
               </div>
               <div class="text-end pt-1">
@@ -86,6 +86,7 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
+                      <th></th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Offer Provider</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Title</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Note</th>
@@ -101,15 +102,18 @@
                      
                     <tr>
                       <td>
-                        <div class="d-flex px-2 py-1">
+                       
                           <div>
-                            <img src="~/MakaniAssets/uploads/@item.User.ProfileImage" class="avatar avatar-sm me-3" alt="xd">
+                            <img src="~/uploads/@item.User.ProfileImage" class="avatar avatar-sm me-3" alt="xd">
                           </div>
+                          </td>
+                          <td>
                           <div class="d-flex flex-column justify-content-center">
                             <h6 class="mb-0 text-sm">@item.User.FullName</h6>
                           </div>
-                        </div>
+                        
                       </td>
+
                       <td>
                         <span class="text-xs font-weight-bold"> @item.PayingOffer.Title </span>
                       </td>

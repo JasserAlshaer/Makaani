@@ -224,7 +224,7 @@ namespace Makaani.Controllers
         public IActionResult SingleEstate(int id)
         {
 
-
+           
 
             int productId = 0;
             var productObj = _context.Ads.Where(x => x.AdsId == id).SingleOrDefault();
@@ -232,6 +232,8 @@ namespace Makaani.Controllers
             {
                 productId =(int) productObj.ProductId;
             }
+            ViewBag.features = _context.Feature.Where(a => a.ProductId == productId);
+           
             var media = _context.Media.Where(x => x.ProductId == productId && x.IsMainImage==true).ToList();
             
             var category = _context.Category.ToList();
@@ -353,7 +355,7 @@ namespace Makaani.Controllers
                 }
             }
 
-            return View("TopSalers",topSellers );
+            return View("TopSellers",topSellers );
         }
 
         public IActionResult Testimonials()

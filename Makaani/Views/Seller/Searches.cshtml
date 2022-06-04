@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Makaani.Models.UserSearch>
 @{
-    Layout = "_LayoutSaler";
+    Layout = "_LayoutSeller";
 }
 <div class="card my-4">
     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+        <div class="bg-gradient-success shadow-primary border-radius-lg pt-4 pb-3">
             <h6 class="text-white text-capitalize ps-3">Searches table</h6>
         </div>
     </div>
@@ -44,7 +44,7 @@
                        
                         <td class="align-middle">
                            
-                            <a asp-controller="Saler"
+                            <a asp-controller="Seller"
                             asp-action="SearchForEstateFromDashboard" 
                             asp-route-keyWord="@item.SearchTitle"
                             asp-route-categotyId="@item.CategoryId"
@@ -52,7 +52,7 @@
                             class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Search">
                                 Search Again 
                             </a>
-                            <a asp-controller="Saler"
+                            <a asp-controller="Seller"
                             asp-action="DeleteSearch" 
                            
                             asp-route-deleteAll="false"

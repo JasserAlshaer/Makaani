@@ -1,16 +1,16 @@
 ﻿@model IEnumerable<Makaani.Models.LastAds>
 @{
-    Layout = "_LayoutSaler";
+    Layout = "_LayoutSeller";
 }
 <div class="card my-4">
     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Views table</h6>
+        <div class="bg-gradient-success shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Last Views Ads table</h6>
         </div>
     </div>
     <div class="row">
-    <button type="button" class="btn-primary col-5" style="color:white; background-color:green; margin-left:80px">
-       <a asp-action="ClearLastViewAds"> Clear Views History</a>
+    <button type="button" class="btn-primary col-5" style="color:white;margin-left:80px">
+       <a asp-action="ClearLastViewAds" style="color:white;text-decoration:none" >Clear Views History</a>
      </button>
      </div>
     <div class="card-body px-0 pb-2">
@@ -20,7 +20,7 @@
                     <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Ads Title</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Last Viewd</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Last Viewd At</th>
                         <th class="text-secondary opacity-7"></th>
                     </tr>
                 </thead>

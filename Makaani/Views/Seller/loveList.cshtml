@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<Makaani.Models.LoveListItem>;
 @{
-    Layout = "_LayoutSaler";
+    Layout = "_LayoutSeller";
 }
 <div class="card my-4">
     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Authors table</h6>
+        <div class="bg-gradient-success shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">My Love List</h6>
         </div>
     </div>
     <div class="card-body px-0 pb-2">
@@ -29,8 +29,7 @@
                         <td>
                           <p class="text-xs text-secondary mb-0">@item.LovedProductList.LovedProductListId</p>
                         </td>
-                        <td>
-                        </td>
+                       
                         <td class="align-middle text-center text-sm">
                             <span class="badge badge-sm bg-gradient-success">@item.Ads.Title</span>
                         </td>
@@ -42,7 +41,7 @@
                         <td class="align-middle">
                            
                             <a asp-action="DeleteFromLoveList" asp-route-id="@item.LovedProductList.LovedProductListId" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete">
-                                UnFollow
+                                Delete Ads From List
                             </a>
                         </td>
                     </tr>

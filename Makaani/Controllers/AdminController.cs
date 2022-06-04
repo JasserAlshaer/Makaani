@@ -28,7 +28,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public IActionResult Users()
@@ -39,7 +39,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public IActionResult Testimonials()
@@ -61,7 +61,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public IActionResult RejectTesitominals(int id)
@@ -81,7 +81,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
 
@@ -102,7 +102,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public IActionResult Products()
@@ -144,7 +144,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
 
@@ -158,7 +158,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         //#83BD75

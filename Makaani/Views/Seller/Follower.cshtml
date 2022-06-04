@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<Makaani.Models.Followers>;
 @{
-    Layout = "_LayoutSaler";
+    Layout = "_LayoutSeller";
 }
 <div class="card my-4">
     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Follower</h6>
+        <div class="bg-gradient-success shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Following</h6>
         </div>
     </div>
     <div class="card-body px-0 pb-2">
@@ -31,7 +31,7 @@
                         <td>
                         </td>
                         <td class="align-middle text-center text-sm">
-                            <span class="badge badge-sm bg-gradient-success">@item.User.FullName</span>
+                            <p class="text-md-center text-secondary">@item.User.FullName</p>
                         </td>
 
                        

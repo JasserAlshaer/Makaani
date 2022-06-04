@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Makaani.Models.MediaType>;
 @{
-     Layout = "_LayoutSaler";
+     Layout = "_LayoutSeller";
      var id=ViewBag.proId;
 }
 <div class="row">
@@ -41,13 +41,13 @@
 
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Save Media</button>
+                      <button type="submit" class="btn btn-lg bg-gradient-success btn-lg w-100 mt-4 mb-0">Save Media</button>
                     </div>
                      </form>
 
                     <form asp-action="InsertLoactions" method="get">
                      <div class="text-center">
-                      <button type="submit"  class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Move To Add Location</button>
+                      <button type="submit"  class="btn btn-lg bg-gradient-success btn-lg w-100 mt-4 mb-0">Move To Add Location</button>
                     </div>
                   </form>
                 </div>

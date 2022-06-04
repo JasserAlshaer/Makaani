@@ -29,7 +29,7 @@ $indigo:  #596CFF !default;
 $purple:  #6f42c1 !default;
 $pink:    #d63384 !default;
 $red:     #F56565 !default;
-$rose:    #e91e63 !default;
+$rose:    #26c49f !default;
 $orange:  #fd7e14 !default;
 $yellow:  #FBD38D !default;
 $green:   #81E6D9 !default;
@@ -54,7 +54,7 @@ $colors: (
 ) !default;
 // scss-docs-end colors-map
 
-$primary:       #e91e63 !default;
+$primary:       #26c49f !default;
 $secondary:     #7b809a !default;
 $info:          #1A73E8 !default;
 $success:       #4CAF50 !default;
@@ -575,7 +575,7 @@ $text-gradient-bg-clip:       text !default;
 $text-gradient-text-fill:     transparent !default;
 $text-gradient-position:      relative !default;
 $text-gradient-zindex:        1 !default;
-$text-gradient-bg-primary:    linear-gradient(195deg, $primary-gradient, $primary-gradient-state) !default;
+$text-gradient-bg-gradient-success:    linear-gradient(195deg, $primary-gradient, $primary-gradient-state) !default;
 $text-gradient-bg-info:       linear-gradient(195deg, $info-gradient, $info-gradient-state) !default;
 $text-gradient-bg-success:    linear-gradient(195deg, $success-gradient, $success-gradient-state) !default;
 $text-gradient-bg-warning:    linear-gradient(195deg, $warning-gradient, $warning-gradient-state) !default;

@@ -192,7 +192,7 @@ p {
   z-index: $text-gradient-zindex;
 
   &.text-primary {
-    background-image: $text-gradient-bg-primary;
+    background-image: $text-gradient-bg-gradient-success;
   }
   &.text-info {
     background-image: $text-gradient-bg-info;

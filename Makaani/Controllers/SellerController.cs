@@ -55,7 +55,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public IActionResult Profile()
@@ -101,7 +101,7 @@ namespace Makaani.Controllers
 
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
 
@@ -147,7 +147,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
 
@@ -161,7 +161,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
          }
         [HttpPost]
@@ -199,7 +199,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
             }
         [HttpPost]
@@ -226,7 +226,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         [HttpPost]
@@ -240,17 +240,22 @@ namespace Makaani.Controllers
             _context.SaveChanges();
             return RedirectToAction("InsertAds");
         }
-        public IActionResult InsertProducts()
+
+    public IActionResult InsertProducts()
         {
             int id = (int)HttpContext.Session.GetInt32("UserId");
             if (id != 0)
             {
-                var role = _context.Login.Where(x => x.UserId == id).SingleOrDefault();
+                var role = _context.Login.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).SingleOrDefault();
                 if (role == null || role.RoleId != 2)
                 {
                     return RedirectToAction("Index");
                 }
-                return View(_context.Finishes.ToList());
+                else
+                {
+                    return View(_context.Finishes.ToList());
+                }
+               
             }
             return RedirectToAction("Index");
                
@@ -301,7 +306,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
        [HttpPost]
@@ -352,7 +357,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public IActionResult UpdateProfile()
@@ -387,7 +392,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         [HttpPost]
@@ -459,7 +464,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public IActionResult FollowNewUser(int seondUserId)
@@ -480,13 +485,13 @@ namespace Makaani.Controllers
                 }
                 else
                 {
-                    ViewBag.mas = "Your'e Not Login OR You're Follwe This Saler Already";
+                    ViewBag.mas = "Your'e Not Login OR You're Follwe This Seller Already";
                     return View("Error");
                 }
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
 
         }
@@ -509,7 +514,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
 
         }
@@ -532,7 +537,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public async Task<IActionResult> ClearLastViewAds()
@@ -550,7 +555,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public async Task<IActionResult> RemoveLastViewAdsRecord(int recordId)
@@ -570,7 +575,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
 
@@ -578,26 +583,34 @@ namespace Makaani.Controllers
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
-                int lovelistId = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).Single().LoveListId;
-                var loveItems = _context.LovedProductList.Where(x => x.LoveListId == lovelistId).ToList();
-                var ads = _context.Ads.ToList();
-                var product = _context.Product.ToList();
+                var lovelist = _context.LoveList.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).SingleOrDefault();
+                if (lovelist != null)
+                {
+                    var loveItems = _context.LovedProductList.Where(x => x.LoveListId == lovelist.LoveListId).ToList();
+                    var ads = _context.Ads.ToList();
+                    var product = _context.Product.ToList();
 
-                var myLoveList = from l in loveItems
-                                 join p in product on
-             l.ProductId equals p.ProductId
-                                 join a in ads on p.ProductId equals a.ProductId
-                                 select new LoveListItem
-                                 {
-                                     LovedProductList = l,
-                                     Product = p,
-                                     Ads = a
-                                 };
-                return View(myLoveList);
+                    var myLoveList = from l in loveItems
+                                     join p in product on
+                 l.ProductId equals p.ProductId
+                                     join a in ads on p.ProductId equals a.ProductId
+                                     select new LoveListItem
+                                     {
+                                         LovedProductList = l,
+                                         Product = p,
+                                         Ads = a
+                                     };
+                    return View(myLoveList);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Seller");
+                }
+              
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public IActionResult InsertToLoveList(int productId)
@@ -632,7 +645,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         public IActionResult DeleteFromLoveList(int productId)
@@ -654,7 +667,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
         //step-4
@@ -668,7 +681,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
        
@@ -702,7 +715,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
 
 
@@ -788,7 +801,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
             //return View(offers);
         }
@@ -802,7 +815,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
 
@@ -833,7 +846,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
 
@@ -876,7 +889,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
 
         }
@@ -888,7 +901,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
 
@@ -925,7 +938,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
      
@@ -937,7 +950,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
 
@@ -1007,7 +1020,7 @@ namespace Makaani.Controllers
             }
             else
             {
-                return RedirectToAction("Home", "Login");
+                return RedirectToAction("Login", "Home");
             }
         }
     }

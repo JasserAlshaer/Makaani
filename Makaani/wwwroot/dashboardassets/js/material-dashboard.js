@@ -125,8 +125,8 @@ function sidebarColor(a) {
   var parent = document.querySelector(".nav-link.active");
   var color = a.getAttribute("data-color");
 
-  if (parent.classList.contains('bg-gradient-primary')) {
-    parent.classList.remove('bg-gradient-primary');
+  if (parent.classList.contains('bg-gradient-success')) {
+    parent.classList.remove('bg-gradient-success');
   }
   if (parent.classList.contains('bg-gradient-dark')) {
     parent.classList.remove('bg-gradient-dark');
