@@ -21,7 +21,7 @@ namespace Makaani.Controllers
                 ViewBag.Customer = _context.Login.Where(x => x.RoleId == 1).Count();
                 ViewBag.Testimonoials = _context.Testimonails.Count();
                 ViewBag.Seller = _context.Login.Where(x => x.RoleId == 2).Count();
-                ViewBag.Searches = _context.UserSearch.ToList();
+                ViewBag.Searches = _context.UserSearch.Count();
                 ViewBag.Last = _context.LastViewAds.Count();
                 ViewBag.PayOffer = _context.PayingOffer.Count();
                 return View();
@@ -35,7 +35,7 @@ namespace Makaani.Controllers
         {
             if (HttpContext.Session.GetInt32("UserId") != 0)
             {
-                return View(_context.User.OrderByDescending(x => x.JoiningDate).ToList());
+                return View(_context.User.Where(x=>x.UserId!=6).OrderByDescending(x => x.JoiningDate).ToList());
             }
             else
             {
@@ -47,7 +47,7 @@ namespace Makaani.Controllers
             if (HttpContext.Session.GetInt32("UserId") != 0)
             {
                 var users = _context.User.ToList();
-                var testiomonails = _context.Testimonails.ToList();
+                var testiomonails = _context.Testimonails.Where(t=>t.IsAccepted!=true).ToList();
 
                 var UserFeeds = from u in users
                                 join t in testiomonails
