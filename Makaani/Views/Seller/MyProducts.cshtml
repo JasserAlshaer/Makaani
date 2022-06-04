@@ -17,7 +17,7 @@
                   <thead>
                     <tr>
                      
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" colspan="2">Owner</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Owner</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Ads Title</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Area</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
@@ -29,30 +29,29 @@
                        @foreach (var item in Model)
                      {
                           <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div>
-                            <img src="~/uploads/@item.User.ProfileImage" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
-                          </div>
+                     
+                        
+                           <td>
                           <div class="d-flex flex-column justify-content-center">
                             <h6 class="mb-0 text-sm">@item.User.FullName</h6>
                            
                           </div>
-                        </div>
-                      </td>
+                           </td>
+                        
+                    
                       <td>
                         <p class="text-xs font-weight-bold mb-0">@item.Ads.Title</p>
                         
                       </td>
                       <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success">@item.Product.Area</span>
+                        <span class="badge text-center badge-sm bg-gradient-success">@item.Product.Area</span>
                       </td>
                       <td class="align-middle text-center">
                         <span class="text-secondary text-xs font-weight-bold">@item.Ads.Descrption</span>
                       </td>
 
                        <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">@item.Ads.Price</span>
+                        <span class="text-secondary text-center text-xs font-weight-bold">@item.Ads.Price</span>
                       </td>
                       
                     </tr>

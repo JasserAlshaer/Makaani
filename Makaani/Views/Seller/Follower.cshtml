@@ -14,6 +14,7 @@
                 <thead>
                     <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Image</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">User Name</th>
                         <th class="text-secondary opacity-7"></th>
                     </tr>
@@ -29,9 +30,13 @@
                           <p class="text-xs text-secondary mb-0">@item.Follower.FollowerId</p>
                         </td>
                         <td>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                            <p class="text-md-center text-secondary">@item.User.FullName</p>
+                       
+                         
+                            <img src="~/uploads/@item.User.ProfileImage" class="avatar avatar-sm me-3" alt="xd">
+                         
+                          </td>
+                        <td class="align-middle text-sm">
+                            <p class="text-secondary">@item.User.FullName</p>
                         </td>
 
                        

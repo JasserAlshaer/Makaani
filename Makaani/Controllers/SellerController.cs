@@ -180,7 +180,7 @@ namespace Makaani.Controllers
                 }
 
                 Media media = new Media();
-                media.MediaId = _context.Media.OrderByDescending(x => x.MediaId).First().MediaId+1;
+               // media.MediaId = _context.Media.OrderByDescending(x => x.MediaId).First().MediaId+1;
                 media.MediaTypeId= mediaType;
                 media.IsMainImage = ismain;
                 media.Path = fileName;
@@ -454,7 +454,7 @@ namespace Makaani.Controllers
                 var follower = _context.Follower.Where(a => a.FirstUserId == HttpContext.Session.GetInt32("UserId")).ToList();
                 var user = _context.User.Where(x => x.UserId != HttpContext.Session.GetInt32("UserId")).ToList();
                 var myFollower = from f in follower
-                                 join u in user on f.FirstUserId equals u.UserId
+                                 join u in user on f.SecondUserId equals u.UserId
                                  select new Followers
                                  {
                                      Follower = f,

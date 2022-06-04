@@ -5,22 +5,22 @@
 <div class="card my-4">
     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
         <div class="bg-gradient-success shadow-primary border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Searches table</h6>
+            <h6 class="text-white text-capitalize ps-3">Search History table</h6>
         </div>
     </div>
-    <div class="row">
-      <button type="button" class="btn-primary col-5" style="color:white; background-color:green; margin-left:80px" >
-       <a asp-action="DeleteSearch" asp-route-deleteAll="true"> Clear Search History</a>
-       </button>
-     </div>
+   @* <div class="row">
+    <button type="button" class="btn-primary col-5" style="color:white;margin-left:80px">
+       <a asp-action="ClearLastViewAds" style="color:white;text-decoration:none" >Clear Views History</a>
+     </button>
+     </div>*@
     <div class="card-body px-0 pb-2">
         <div class="table-responsive p-0">
-            <table>
-           <thead>
+            <table class="table align-items-center mb-0">
+                <thead>
                     <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" colspan="2">Id</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Search Title</th>
-
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Search Title</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" colspan="2">Actions</th>
                         <th class="text-secondary opacity-7"></th>
                     </tr>
                 </thead>
@@ -32,18 +32,14 @@
                     <tr>
 
                         <td>
-                          <p class="text-xs text-secondary mb-0">@item.UserSearchId</p>
+                          <p  class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@item.UserSearchId</p>
                         </td>
-                        <td>
+                      
+                        <td >
+                              <p  class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">@item.SearchTitle</p>
+                          
                         </td>
-                        <td class="align-middle text-center text-sm">
-                            <span class="badge badge-sm bg-gradient-success">@item.SearchTitle</span>
-                        </td>
-                        
-                       
-                       
-                        <td class="align-middle">
-                           
+                         <td class="">
                             <a asp-controller="Seller"
                             asp-action="SearchForEstateFromDashboard" 
                             asp-route-keyWord="@item.SearchTitle"
@@ -52,13 +48,18 @@
                             class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Search">
                                 Search Again 
                             </a>
-                            <a asp-controller="Seller"
+                        </td>
+                       
+                       
+                        <td class="align-middle">
+                           
+                           <a asp-controller="Seller"
                             asp-action="DeleteSearch" 
                            
                             asp-route-deleteAll="false"
                             asp-route-placeId="@item.UserSearchId"
                             class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete">
-                                Delete Seach Record 
+                                Delete 
                             </a>
                         </td>
                     </tr>
@@ -67,4 +68,12 @@
             </table>
         </div>
     </div>
- </div>
+         <div class="row">
+         
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-lg bg-gradient-success btn-lg w-100 mt-4 mb-0">
+                         <a asp-action="DeleteSearch" asp-route-deleteAll="true" style="color:white;"> Clear Search History</a>
+                      </button>
+                    </div>
+     </div>
+     </div>

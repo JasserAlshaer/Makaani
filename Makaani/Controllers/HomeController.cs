@@ -416,7 +416,11 @@ namespace Makaani.Controllers
                     {
                         return RedirectToAction("Index", "Admin");
                     }
-                    return RedirectToAction("Index", "Seller");
+                    else
+                    {
+                        return RedirectToAction("Index", "Seller");
+                    }
+                   
                 }
             }
             else
