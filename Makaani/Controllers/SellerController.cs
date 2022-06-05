@@ -17,6 +17,7 @@ namespace Makaani.Controllers
 
         public static int currentProjectId;
         public static int currentLocationId;
+        public static bool isTestSent = false;
         
 
         public SellerController(MakaniContext context, IWebHostEnvironment environment)
@@ -30,9 +31,9 @@ namespace Makaani.Controllers
 
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
-                
-            
 
+
+            ViewBag.show = isTestSent;
             ViewBag.Ads = _context.Ads.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).Count();
             ViewBag.Offers = _context.PayingOffer.Where(a => a.UserId == HttpContext.Session.GetInt32("UserId")).Count();
             ViewBag.Follower = _context.Follower.Where(a => a.SecondUserId == HttpContext.Session.GetInt32("UserId")).Count();
@@ -195,7 +196,7 @@ namespace Makaani.Controllers
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
-                return View();
+                return View(_context.Provinces.ToList());
             }
             else
             {
@@ -243,9 +244,11 @@ namespace Makaani.Controllers
 
     public IActionResult InsertProducts()
         {
-            int id = (int)HttpContext.Session.GetInt32("UserId");
-            if (id != 0)
+           
+            
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
+                int id =(int) HttpContext.Session.GetInt32("UserId");
                 var role = _context.Login.Where(x => x.UserId == HttpContext.Session.GetInt32("UserId")).SingleOrDefault();
                 if (role == null || role.RoleId != 2)
                 {
@@ -283,6 +286,7 @@ namespace Makaani.Controllers
             product.FinishesId = finishiesId;
             product.FloorSum = floorsum;
             product.LivingRoom = living;
+            product.OwnerId = HttpContext.Session.GetInt32("UserId");
             _context.Add(product);
             _context.SaveChanges();
 
@@ -500,7 +504,7 @@ namespace Makaani.Controllers
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
-                var recorde = _context.Follower.Where(x => x.FollowerId == follwerId).Single();
+                var recorde = _context.Follower.Where(x => x.FollowerId == follwerId).SingleOrDefault();
                 if (recorde == null)
                 {
                     return NotFound();
@@ -652,7 +656,7 @@ namespace Makaani.Controllers
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
-                var recorde = _context.LovedProductList.Where(x => x.ProductId == productId).Single();
+                var recorde = _context.LovedProductList.Where(x => x.LovedProductListId == productId).Single();
                 if (recorde == null)
                 {
                     return NotFound();
@@ -702,12 +706,15 @@ namespace Makaani.Controllers
                 ad.Descrption = description;
                 ad.Price = price;
                 ad.CategoryId = categotyId;
-                ad.PromotionId = promationId;
+                ad.PromotionId = null;
+                ad.OfferId = null;
                 ad.DepartmentId = departmentId;
                 ad.Title = title;
+                ad.UserId = id;
+                ad.Date = DateTime.Now;
                 ad.LocationId = currentLocationId;
                 
-                _context.Ads.Add(ad);
+                _context.Add(ad);
 
 
                 await _context.SaveChangesAsync();
@@ -962,11 +969,14 @@ namespace Makaani.Controllers
             testimonails.Description= desc;
             testimonails.UserId= HttpContext.Session.GetInt32("UserId");
             testimonails.IsAccepted = false;
+            
+            testimonails.TestimonailsId = _context.Testimonails.OrderByDescending(x => x.TestimonailsId).FirstOrDefault().TestimonailsId+1;
 
             _context.Add(testimonails);
             _context.SaveChanges();
-
-            return View("Index");
+            isTestSent = true;
+            ViewBag.show = isTestSent;
+            return RedirectToAction("Index");
         }
         public IActionResult UpgradeAccount()
         {
@@ -1014,6 +1024,7 @@ namespace Makaani.Controllers
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
+                HttpContext.Session.Remove("UserId");
                 HttpContext.Session.Clear();
 
                 return RedirectToAction("Index", "Home");

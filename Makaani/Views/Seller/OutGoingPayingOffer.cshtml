@@ -36,7 +36,7 @@
                             <span class="badge badge-sm bg-gradient-success">@item.Ads.Title</span>
                         </td>
                          <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">@item.PayingOffer.OfferDate</span>
+                            <span class="text-secondary text-xs font-weight-bold">@Html.Label(@item.PayingOffer.OfferDate.ToString().Substring(0,9))</span>
                         </td>
                         <td class="align-middle text-center text-sm">
                             <span class="badge badge-sm bg-gradient-success">@item.PayingOffer.ProvidedPrice</span>

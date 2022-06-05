@@ -54,16 +54,16 @@
                   <form role="form" asp-action="UpdatePayOffer" method="post">
                       <input type="number" value="@Model.ProductId" hidden readonly />
                     <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Price</label>
-                      <input type="number" name="price" value="@Model.ProvidedPrice" class="form-control">
+                     
+                      <input type="number" name="price" placeholder="Price" value="@Model.ProvidedPrice" class="form-control">
                     </div>
                     <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Offer Title</label>
-                      <input type="text" name="title" value="@Model.Title" class="form-control">
+                     
+                      <input type="text" name="title" placeholder="Offer Title" value="@Model.Title" class="form-control">
                     </div>
                     <div class="input-group input-group-outline mb-3">
-                      <label class="form-label">Note</label>
-                      <input type="text" name="note" value="@Model.Note" class="form-control">
+                      
+                      <input type="text" name="note" placeholder="Note" value="@Model.Note" class="form-control">
                     </div>
 
                     <div class="text-center">
@@ -71,12 +71,7 @@
                     </div>
                   </form>
                 </div>
-                @*<div class="card-footer text-center pt-0 px-lg-2 px-1">
-                  <p class="mb-2 text-sm mx-auto">
-                    Already have an account?
-                    <a href="../pages/sign-in.html" class="text-primary text-gradient font-weight-bold">Sign in</a>
-                  </p>
-                </div>*@
+               
               </div>
             </div>
           </div>

@@ -5,8 +5,10 @@
     var loveList=ViewBag.LoveList;
     var payyingOffer=ViewBag.Offers;
     var ads = ViewBag.Ads;
+   
 
 }
+
  <div class="container-fluid py-4">
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -88,10 +90,10 @@
                     <tr>
                       <th></th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Offer Provider</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Title</th>
+                      <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Title</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Note</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
-                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                      <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
+                       <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -117,14 +119,14 @@
                       <td>
                         <span class="text-xs font-weight-bold"> @item.PayingOffer.Title </span>
                       </td>
-                      <td class="align-middle text-center text-sm">
+                      <td class="align-middle  text-sm">
                         <span class="text-xs font-weight-bold"> @item.PayingOffer.Note</span>
                       </td>
                       <td class="align-middle">
                         <span class="text-xs font-weight-bold"> @item.PayingOffer.ProvidedPrice </span>
                       </td>
                          <td class="align-middle">
-                        <span class="text-xs font-weight-bold"> @item.PayingOffer.OfferDate </span>
+                        <span class="text-xs font-weight-bold">@Html.Label(@item.PayingOffer.OfferDate.ToString().Substring(0,9))</span>
                       </td>
                     </tr>
                   }

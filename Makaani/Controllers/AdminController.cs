@@ -15,7 +15,7 @@ namespace Makaani.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 ViewBag.Ads = _context.Ads.Count();
                 ViewBag.Customer = _context.Login.Where(x => x.RoleId == 1).Count();
@@ -33,7 +33,7 @@ namespace Makaani.Controllers
         }
         public IActionResult Users()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 return View(_context.User.Where(x=>x.UserId!=6).OrderByDescending(x => x.JoiningDate).ToList());
             }
@@ -44,7 +44,7 @@ namespace Makaani.Controllers
         }
         public IActionResult Testimonials()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var users = _context.User.ToList();
                 var testiomonails = _context.Testimonails.Where(t=>t.IsAccepted!=true).ToList();
@@ -66,7 +66,7 @@ namespace Makaani.Controllers
         }
         public IActionResult RejectTesitominals(int id)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var test = _context.Testimonails.Where(x => x.TestimonailsId == id).SingleOrDefault();
                 if (test == null)
@@ -87,7 +87,7 @@ namespace Makaani.Controllers
 
         public IActionResult AcceptTesitominals(int id)
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var test = _context.Testimonails.Where(x => x.TestimonailsId == id).SingleOrDefault();
                 if (test == null)
@@ -107,7 +107,7 @@ namespace Makaani.Controllers
         }
         public IActionResult Products()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 var EsatateCategory = _context.Category.ToList();
                 var Place = _context.Provinces.ToList();
@@ -150,8 +150,9 @@ namespace Makaani.Controllers
 
         public IActionResult Logout()
         {
-            if (HttpContext.Session.GetInt32("UserId") != 0)
+            if (HttpContext.Session.GetInt32("UserId") != null)
             {
+                HttpContext.Session.Remove("UserId");
                 HttpContext.Session.Clear();
 
                 return RedirectToAction("Index", "Home");

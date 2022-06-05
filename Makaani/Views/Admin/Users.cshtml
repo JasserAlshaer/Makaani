@@ -18,10 +18,10 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
+                      <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
 
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Address</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Barth Date</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Barth Date</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Join Date</th>
                       <th class="text-secondary opacity-7"></th>
                     </tr>
@@ -30,26 +30,26 @@
                       @foreach (var item in Model)
                      {
                           <tr>
-                      <td>
+                      <td class="align-middle">
                         <div class="d-flex px-2 py-1">
                           <div>
                             <img src="~/uploads/@item.ProfileImage" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
                           </div>
-                          <div class="d-flex flex-column justify-content-center">
+                          <div class="text-center d-flex flex-column justify-content-center">
                             <h6 class="mb-0 text-sm">@item.FullName</h6>
                            
                           </div>
                         </div>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0">@item.Address</p>
+                        <p class="text-center text-xs font-weight-bold mb-0">@item.Address</p>
                         
                       </td>
                       <td class="align-middle text-center text-sm">
-                        <span class="badge badge-sm bg-gradient-success">@item.BirthDate</span>
+                        <span class="badge badge-sm bg-gradient-success">@Html.Label(@item.BirthDate.ToString().Substring(0,9))</span>
                       </td>
                       <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">@item.JoiningDate</span>
+                        <span class="text-secondary text-xs font-weight-bold">@Html.Label(@item.JoiningDate.ToString().Substring(0,9))</span>
                       </td>
                       
                     </tr>
