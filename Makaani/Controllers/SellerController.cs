@@ -349,7 +349,7 @@ namespace Makaani.Controllers
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
 
-                var prod = _context.Ads.Where(l => l.ProductId == productId).Single();
+                var prod = _context.Ads.Where(l => l.ProductId == productId).SingleOrDefault();
                 if (prod == null)
                 {
                     return NotFound();
@@ -358,8 +358,10 @@ namespace Makaani.Controllers
                 {
                     prod.ProductId = null;
                     prod.UserId = null;
+                    prod.Title = null;
+                    prod.CategoryId = null;
                     _context.Update(prod);
-                    _context.SaveChangesAsync();
+                    _context.SaveChanges();
                     return RedirectToAction("MyProducts");
                 }
 

@@ -73,8 +73,8 @@ namespace Makaani.Controllers
                 {
                     return NotFound();
                 }
-                test.IsAccepted = false;
-                _context.Update(test);
+                //test.IsAccepted = false;
+                _context.Remove(test);
                 _context.SaveChanges();
                 return RedirectToAction("Testimonials");
 
