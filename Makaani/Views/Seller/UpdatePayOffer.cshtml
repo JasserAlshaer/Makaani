@@ -52,7 +52,7 @@
                 </div>
                 <div class="card-body">
                   <form role="form" asp-action="UpdatePayOffer" method="post">
-                      <input type="number" value="@Model.ProductId" hidden readonly />
+                      <input type="number" name="offerId" value="@Model.ProductId" hidden readonly />
                     <div class="input-group input-group-outline mb-3">
                      
                       <input type="number" name="price" placeholder="Price" value="@Model.ProvidedPrice" class="form-control">

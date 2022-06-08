@@ -40,7 +40,7 @@
                           
                         </td>
                          <td class="">
-                            <a asp-controller="Seller"
+                            <a asp-controller="Home"
                             asp-action="SearchForEstateFromDashboard" 
                             asp-route-keyWord="@item.SearchTitle"
                             asp-route-categotyId="@item.CategoryId"
@@ -57,7 +57,7 @@
                             asp-action="DeleteSearch" 
                            
                             asp-route-deleteAll="false"
-                            asp-route-placeId="@item.UserSearchId"
+                            asp-route-searchId="@item.UserSearchId"
                             class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete">
                                 Delete 
                             </a>

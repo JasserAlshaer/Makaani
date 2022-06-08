@@ -349,15 +349,21 @@ namespace Makaani.Controllers
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
 
-                var prod = _context.Product.Where(l => l.ProductId == productId).Single();
+                var prod = _context.Ads.Where(l => l.ProductId == productId).Single();
                 if (prod == null)
                 {
                     return NotFound();
                 }
+                else
+                {
+                    prod.ProductId = null;
+                    prod.UserId = null;
+                    _context.Update(prod);
+                    _context.SaveChangesAsync();
+                    return RedirectToAction("MyProducts");
+                }
 
-                _context.Remove(prod);
-                _context.SaveChangesAsync();
-                return RedirectToAction("MyProducts");
+              
             }
             else
             {
@@ -839,7 +845,7 @@ namespace Makaani.Controllers
             payingOffer.UserId= HttpContext.Session.GetInt32("UserId");
             _context.Add(payingOffer);
             _context.SaveChanges();
-            return RedirectToAction("PayingOffer", payingOffer);
+            return RedirectToAction("OutGoingPayingOffer");
         }
         public IActionResult UpdatePayOffer(int offerId)
         {
@@ -873,7 +879,7 @@ namespace Makaani.Controllers
                 payingOffer.ProvidedPrice = price;
                 payingOffer.OfferDate = DateTime.Now;
                 payingOffer.UserId = HttpContext.Session.GetInt32("UserId");
-                _context.Add(payingOffer);
+                _context.Update(payingOffer);
                 _context.SaveChanges();
             }
             return RedirectToAction("OutGoingPayingOffer");
@@ -905,7 +911,7 @@ namespace Makaani.Controllers
         {
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
-                return View(_context.UserSearch.ToList());
+                return View(_context.UserSearch.Where(x=>x.UserId== HttpContext.Session.GetInt32("UserId")).ToList());
             }
             else
             {
