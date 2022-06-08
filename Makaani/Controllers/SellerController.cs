@@ -652,6 +652,7 @@ namespace Makaani.Controllers
                 return RedirectToAction("Login", "Home");
             }
         }
+
         public IActionResult DeleteFromLoveList(int productId)
         {
             if (HttpContext.Session.GetInt32("UserId") != null)

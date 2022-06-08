@@ -22,6 +22,7 @@
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Area</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
+                      <th>Delete</th>
                      
                     </tr>
                   </thead>
@@ -52,6 +53,12 @@
 
                        <td class="align-middle text-center">
                         <span class="text-secondary text-center text-xs font-weight-bold">@item.Ads.Price</span>
+                      </td>
+
+                      <td>  
+                          <a asp-action="DeleteProducts" asp-route-productId="@item.Ads.ProductId" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Delete">
+                                DeleteProducts
+                            </a>
                       </td>
                       
                     </tr>
