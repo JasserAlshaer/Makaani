@@ -1,7 +1,7 @@
 ﻿@model Tuple<IEnumerable<Makaani.Models.SingleAds>
 ,List<Makaani.Models.Media>>;
 @{
-	
+	var mainImage = ViewBag.mainImage;
 	var view=ViewBag.adsViews;
 	var features=ViewBag.features as IEnumerable<Makaani.Models.Feature>;
 }
@@ -41,19 +41,19 @@ a-scene {
 							  
 							  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                                     <div class="carousel-inner" style="padding:15px;">
-                                        <div class="carousel-item active" >
-                                             <img src="~/uploads/property-6.jpg" width="300" height="390" style="padding:15px;" class="d-block w-100" alt="...">
-                                           </div>
+
+										<div class="carousel-item active" >
+                                             <img src="~/uploads/@mainImage" width="300" height="390" style="padding:15px;" class="d-block w-100" alt="...">
+                                        </div>
 	 
 	                                        @foreach (var item in Model.Item2)
                                                   { 
 	                                            <div class="carousel-item">
-													@if(@item.MediaTypeId==1){
-                                                <img src="~/uploads/@item.Path" style="padding:15px;" width="300" height="300" class="d-block w-100" alt="...">
-                                            }      
+													
+                                                <img src="~/uploads/@item.Path" width="300" height="390" style="padding:15px;" class="d-block w-100" alt="...">
+                                                      
 											</div>
                                            }
- 
 
   </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -177,13 +177,13 @@ a-scene {
 				
                 <div id="myEmbeddedScene">
 					
-	                                        @foreach (var item in Model.Item2)
+	                  @foreach (var item in Model.Item2)
 						{
 							@if (@item.MediaTypeId == 3)
 							{
-								<a-scene embedded>
-                                      <a-sky src="@item.Path"></a-sky> 
-                                </a-scene>
+						<script src="https://360player.io/static/dist/scripts/embed.js" defer></script>
+                             <iframe src="https://360player.io/p/MRZvhq/" frameborder="0" width=560 height=315
+                                allow="fullscreen; xr-spatial-tracking" data-token="MRZvhq"></iframe>
 							}
 							
                        }  
@@ -211,14 +211,9 @@ a-scene {
 					                    @foreach (var item in Model.Item2)
 						{
 							@if (@item.MediaTypeId == 2)
-							{
-@*								 <video class="col-12"  controls>
-                       <source src="@item.Path" type="video/mp4">
-                        <source src="mov_bbb.ogg" type="video/ogg">
-                        Your browser does not support HTML video.
-                    </video>*@
-					            <iframe style="margin-top:80px;" height="400"
-                                  src="https://www.youtube.com/embed/yOsYizQcYVM">
+							{						
+								<iframe width="420" height="400" style="margin-top:100px;"
+                                     src="https://www.youtube.com/embed/@item.Path">
                                 </iframe>
 							}
 							

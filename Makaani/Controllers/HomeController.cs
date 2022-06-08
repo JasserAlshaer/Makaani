@@ -306,7 +306,8 @@ namespace Makaani.Controllers
 
                 }
             }
-            return View(Tuple.Create(estateFullAdsInfo,_context.Media.ToList()));
+            ViewBag.mainImage = _context.Media.Where(x => x.ProductId == productId && x.IsMainImage == true).FirstOrDefault().Path;
+            return View(Tuple.Create(estateFullAdsInfo,_context.Media.Where(x=>x.ProductId== productId).ToList()));
         }
        
         public IActionResult Categorys()
