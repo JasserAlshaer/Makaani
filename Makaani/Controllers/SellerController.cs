@@ -1022,6 +1022,10 @@ namespace Makaani.Controllers
                     login.RoleId = 2;
                 }
 
+                _context.Update(login);
+                _context.Update(visa);
+                _context.SaveChanges();
+
             }
             else
             {
